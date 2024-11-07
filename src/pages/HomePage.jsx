@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import NavBar from '../components/NavBar'
+import { marked } from 'marked'
 
 export default function HomePage() {
   const exampleMessage = "saya ingin membuat metaverse, siapa yang harus saya hubungi?"
@@ -17,6 +18,8 @@ strategi bisnis, desain sistem, dan implementasi teknologi.\n\nUntuk memulai, An
 menghubungi beberapa pihak ini untuk mendapatkan informasi lebih lanjut tentang potensi kerja sama atau dukungan yang
 dapat diberikan.`
 
+  const formattedResponse = marked(exampleResponse)
+
   const [message, setMessage] = useState('')
 
   function handleMessageInput(e) {
@@ -32,11 +35,12 @@ dapat diberikan.`
         {/* Navbar */}
         <div className="flex flex-col flex-grow">
           {/* Chat area */}
-          <div className={`${!exampleResponse ? 'hidden' : 'flex'} flex-col items-center chat-area flex-grow`}>
-            <div className='px-56'>
-              <div>{exampleResponse}</div>
-              <div>{exampleResponse}</div>
-            </div>
+          <div className={`${!exampleResponse ? 'hidden' : 'flex'} flex-col items-center chat-area flex-grow px-56 gap-10`}>
+              {/* Use dangerouslySetInnerHTML to inject the HTML */}
+              <div className='ml-auto bg-slate-100 py-2 px-4 rounded-2xl'>{exampleMessage}</div>
+              <div dangerouslySetInnerHTML={{ __html: formattedResponse }} />
+              <div className='ml-auto bg-slate-100 py-2 px-4 rounded-2xl'>{exampleMessage}</div>
+              <div dangerouslySetInnerHTML={{ __html: formattedResponse }} />
           </div>
 
           {/* Input area */}
@@ -49,7 +53,7 @@ dapat diberikan.`
                 placeholder="Kirim pertanyaan"
                 className="border border-black rounded-xl px-5 py-2 w-1/2 h-11 max-h-36 resize-none"
               />
-              <button className="rounded-xl text-white bg-black px-5 h-11 flex-shrink-1 items-start self-end">
+              <button className="rounded-xl text-white bg-black px-5 h-12 flex-shrink-1 items-start self-end">
                 Kirim
               </button>
             </div>

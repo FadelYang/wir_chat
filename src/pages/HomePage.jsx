@@ -26,6 +26,18 @@ dapat diberikan.`
     setMessage(e.target.value)
     e.target.style.height = '3rem'
     e.target.style.height = `${e.target.scrollHeight}px`
+    console.log(process.env.backend_url);
+    console.log(message);
+  }
+
+  function getAnswer(e) {
+    e.preventDefault()
+
+    const data = {
+      message: message
+    }
+
+    // fetch(process.env.BACK)
   }
 
   return (

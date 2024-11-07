@@ -35,7 +35,7 @@ dapat diberikan.`
         {/* Navbar */}
         <div className="flex flex-col flex-grow">
           {/* Chat area */}
-          <div className={`${!exampleResponse ? 'hidden' : 'flex'} flex-col items-center chat-area flex-grow px-56 gap-10`}>
+          <div className={`${!exampleResponse ? 'hidden' : 'flex'} flex-col items-center chat-area flex-grow md:px-56 px-20 gap-10`}>
               {/* Use dangerouslySetInnerHTML to inject the HTML */}
               <div className='ml-auto bg-slate-100 py-2 px-4 rounded-2xl'>{exampleMessage}</div>
               <div dangerouslySetInnerHTML={{ __html: formattedResponse }} />

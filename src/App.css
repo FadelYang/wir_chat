@@ -3,6 +3,20 @@
 @tailwind components;
 @tailwind utilities;
 
+
+ol {
+  list-style: decimal;
+  padding-left: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+p > br {
+  display: block;
+  content: " ";
+  margin-top: 1rem;
+}
+
 /* div {
   border: 1px solid black;
   margin: 1px;

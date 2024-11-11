@@ -1,6 +1,9 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import NavBar from '../components/NavBar'
 import { marked } from 'marked'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import remakerBreaks from 'remark-breaks'
 
 export default function HomePage() {
   const [inputMessage, setInputMessage] = useState('')
@@ -18,13 +21,18 @@ export default function HomePage() {
   }, [conversations, sessionId]);
 
   function handleMessageInput(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      sendQuestionMessage()
+    }
+
     setInputMessage(e.target.value)
     e.target.style.height = '3rem'
     e.target.style.height = `${e.target.scrollHeight}px`
   }
 
   const sendQuestionMessage = async (e) => {
-    e.preventDefault()
+
 
     const newInputMessage = { isUser: true, text: inputMessage }
     setConversations((previousMessage) => [...previousMessage, newInputMessage])
@@ -51,8 +59,9 @@ export default function HomePage() {
       setSessionId(data.session_id)
     }
 
-    const formattedBotMessage = marked(answer.outputs[0].outputs[0].results.message.data.text)
-    const botMessage = { isUser: false, text: formattedBotMessage }
+    const rawBotMessage = answer.data.outputs[0].outputs[0].results.message.data.text.replace(/\n\n/gi, '&nbsp; \n')
+
+    const botMessage = { isUser: false, text: rawBotMessage }
     setConversations((previousMessage) => [...previousMessage, botMessage])
   }
 
@@ -72,7 +81,8 @@ export default function HomePage() {
                 {message.isUser ? (
                   message.text
                 ) : (
-                  <div dangerouslySetInnerHTML={{ __html: message.text }} />
+                  // <div dangerouslySetInnerHTML={{ __html: message.text }} />
+                  <ReactMarkdown remarkPlugins={[remarkGfm, remakerBreaks]}>{message.text}</ReactMarkdown>
                 )}
               </div>
             ))}
@@ -90,6 +100,7 @@ export default function HomePage() {
               <textarea
                 value={inputMessage}
                 onChange={handleMessageInput}
+                onKeyDown={handleMessageInput}
                 type="text"
                 placeholder="Kirim pertanyaan"
                 className="w-1/2 px-5 py-2 border border-black resize-none rounded-xl h-11 max-h-36"

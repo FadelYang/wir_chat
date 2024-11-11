@@ -23,7 +23,10 @@ export default function HomePage() {
   function handleMessageInput(e) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
-      sendQuestionMessage()
+
+      if (inputMessage) {
+        sendQuestionMessage()
+      }
     }
 
     setInputMessage(e.target.value)
@@ -105,9 +108,18 @@ export default function HomePage() {
                 placeholder="Kirim pertanyaan"
                 className="w-1/2 px-5 py-2 border border-black resize-none rounded-xl h-11 max-h-36"
               />
-              <button onClick={sendQuestionMessage} className="items-start self-end px-5 text-white bg-black rounded-xl h-11 flex-shrink-1">
-                Kirim
-              </button>
+              {
+                inputMessage ? (
+                  <button onClick={sendQuestionMessage} className="items-start self-end px-5 text-white bg-black rounded-xl h-11 flex-shrink-1">
+                    Kirim
+                  </button>
+                ) : (
+                  <button disabled onClick={sendQuestionMessage} className="items-start self-end px-5 text-white bg-gray-900 rounded-xl h-11 flex-shrink-1">
+                    Kirim
+                  </button>
+                )
+              }
+
             </div>
           </div>
         </div>

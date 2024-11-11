@@ -72,7 +72,14 @@ export default function HomePage() {
       setSessionId(data.session_id)
     }
 
-    const rawBotMessage = answer.data.outputs[0].outputs[0].results.message.data.text.replace(/\n\n/gi, '&nbsp; \n')
+    let rawBotMessage
+
+    try {
+      rawBotMessage = answer.data.outputs[0].outputs[0].results.message.data.text.replace(/\n\n/gi, '&nbsp; \n')
+    } catch (error) {
+      console.log(error);
+      rawBotMessage = 'Gagal menjawab pertanyaan, server mengalami masalah. Silahkan hubungi tim IT Governance'
+    }
 
     const botMessage = { isUser: false, text: rawBotMessage }
     setConversations((previousMessage) => [...previousMessage, botMessage])

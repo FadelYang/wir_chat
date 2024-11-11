@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
 import NavBar from '../components/NavBar'
-import { marked } from 'marked'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remakerBreaks from 'remark-breaks'
@@ -24,6 +23,7 @@ export default function HomePage() {
   useEffect(() => {
     if (isRequestPending) {
       scrollToChatArea()
+      setInputMessage('')
     }
   }, [isRequestPending])
 
@@ -33,13 +33,13 @@ export default function HomePage() {
 
       if (inputMessage) {
         sendQuestionMessage()
-        setInputMessage('')
       }
-    }
+    } else {
+      setInputMessage(e.target.value)
 
-    setInputMessage(e.target.value)
-    e.target.style.height = '3rem'
-    e.target.style.height = `${e.target.scrollHeight}px`
+      e.target.style.height = '3rem'
+      e.target.style.height = `${e.target.scrollHeight}px`
+    }
   }
 
   const scrollToChatArea = () => {

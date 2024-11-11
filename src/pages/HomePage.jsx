@@ -4,6 +4,7 @@ import { marked } from 'marked'
 
 export default function HomePage() {
   const [inputMessage, setInputMessage] = useState('')
+  const [isRequestPending, setIsRequestPending] = useState(false)
   const [sessionId, setSessionId] = useState(() => sessionStorage.getItem('sessionId') || '')
   const [conversations, setConversations] = useState(() => {
     const savedConverstations = sessionStorage.getItem('conversations')
@@ -32,6 +33,8 @@ export default function HomePage() {
       message: inputMessage
     }
 
+    setIsRequestPending(true)
+
     const response = await fetch(process.env.REACT_APP_BACKEND_URL, {
       method: 'POST',
       headers: {
@@ -41,6 +44,8 @@ export default function HomePage() {
     })
 
     const answer = await response.json()
+
+    setIsRequestPending(false)
 
     if (!sessionId && data.session_id) {
       setSessionId(data.session_id)
@@ -71,19 +76,25 @@ export default function HomePage() {
                 )}
               </div>
             ))}
+
+            {
+              isRequestPending && (
+                <div className='bot-message'>Loading...</div>
+              )
+            }
           </div>
 
           {/* Input area */}
           <div className={`sticky bottom-0 bg-white p-3 ${!conversations ? 'my-auto' : ''}`}>
-            <div className="flex gap-1 justify-center">
+            <div className="flex justify-center gap-1">
               <textarea
                 value={inputMessage}
                 onChange={handleMessageInput}
                 type="text"
                 placeholder="Kirim pertanyaan"
-                className="border border-black rounded-xl px-5 py-2 w-1/2 h-11 max-h-36 resize-none"
+                className="w-1/2 px-5 py-2 border border-black resize-none rounded-xl h-11 max-h-36"
               />
-              <button onClick={sendQuestionMessage} className="rounded-xl text-white bg-black px-5 h-11 flex-shrink-1 items-start self-end">
+              <button onClick={sendQuestionMessage} className="items-start self-end px-5 text-white bg-black rounded-xl h-11 flex-shrink-1">
                 Kirim
               </button>
             </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import NavBar from '../components/NavBar'
 import { marked } from 'marked'
 import ReactMarkdown from 'react-markdown'
@@ -13,6 +13,7 @@ export default function HomePage() {
     const savedConverstations = sessionStorage.getItem('conversations')
     return savedConverstations ? JSON.parse(savedConverstations) : []
   })
+  const bottomOfChatArea = useRef(null)
 
   // If sessionId or message change, update the conversations and sessionId value
   useEffect(() => {
@@ -20,12 +21,19 @@ export default function HomePage() {
     sessionStorage.setItem('sessionId', sessionId)
   }, [conversations, sessionId]);
 
+  useEffect(() => {
+    if (isRequestPending) {
+      scrollToChatArea()
+    }
+  }, [isRequestPending])
+
   function handleMessageInput(e) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
 
       if (inputMessage) {
         sendQuestionMessage()
+        setInputMessage('')
       }
     }
 
@@ -34,9 +42,11 @@ export default function HomePage() {
     e.target.style.height = `${e.target.scrollHeight}px`
   }
 
+  const scrollToChatArea = () => {
+    bottomOfChatArea.current?.scrollIntoView({ behavior: 'smooth' });
+  }
+
   const sendQuestionMessage = async (e) => {
-
-
     const newInputMessage = { isUser: true, text: inputMessage }
     setConversations((previousMessage) => [...previousMessage, newInputMessage])
 
@@ -92,7 +102,9 @@ export default function HomePage() {
 
             {
               isRequestPending && (
-                <div className='bot-message'>Loading...</div>
+                <>
+                  <div className='bot-message' ref={bottomOfChatArea}>Loading...</div>
+                </>
               )
             }
           </div>

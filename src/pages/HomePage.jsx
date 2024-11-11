@@ -13,6 +13,7 @@ export default function HomePage() {
     return savedConverstations ? JSON.parse(savedConverstations) : []
   })
   const bottomOfChatArea = useRef(null)
+  const latestBotMessage = useRef(null)
 
   // If sessionId or message change, update the conversations and sessionId value
   useEffect(() => {
@@ -24,6 +25,8 @@ export default function HomePage() {
     if (isRequestPending) {
       scrollToChatArea()
       setInputMessage('')
+    } else if (!isRequestPending) {
+      scrollToLatestBotMessage()
     }
   }, [isRequestPending])
 
@@ -44,6 +47,10 @@ export default function HomePage() {
 
   const scrollToChatArea = () => {
     bottomOfChatArea.current?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  const scrollToLatestBotMessage = () => {
+    latestBotMessage.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
   const sendQuestionMessage = async (e) => {
@@ -101,8 +108,10 @@ export default function HomePage() {
                 {message.isUser ? (
                   message.text
                 ) : (
-                  // <div dangerouslySetInnerHTML={{ __html: message.text }} />
-                  <ReactMarkdown remarkPlugins={[remarkGfm, remakerBreaks]}>{message.text}</ReactMarkdown>
+                  <>
+                    <ReactMarkdown remarkPlugins={[remarkGfm, remakerBreaks]}>{message.text}</ReactMarkdown>
+                    <div ref={latestBotMessage}></div>
+                  </>
                 )}
               </div>
             ))}
@@ -115,6 +124,7 @@ export default function HomePage() {
               )
             }
           </div>
+          {/* End of chat area */}
 
           {/* Input area */}
           <div className={`sticky bottom-0 bg-white p-3 ${!conversations ? 'my-auto' : ''}`}>
@@ -138,7 +148,7 @@ export default function HomePage() {
                   </button>
                 )
               }
-
+              {/* End of input area */}
             </div>
           </div>
         </div>

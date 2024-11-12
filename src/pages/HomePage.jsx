@@ -54,7 +54,9 @@ export default function HomePage() {
   }
 
   const sendQuestionMessage = async (e) => {
-    const newInputMessage = { isUser: true, text: inputMessage }
+    const formattedInputMessage = inputMessage.replace(/\n\n/gi, '&nbsp; \n')
+
+    const newInputMessage = { isUser: true, text: formattedInputMessage }
     setConversations((previousMessage) => [...previousMessage, newInputMessage])
 
     const data = {
@@ -106,7 +108,8 @@ export default function HomePage() {
                 className={message.isUser ? "ml-auto bg-slate-100 py-2 px-4 rounded-2xl" : "bot-message"}
               >
                 {message.isUser ? (
-                  message.text
+                    <ReactMarkdown remarkPlugins={[remarkGfm, remakerBreaks]}>{message.text}</ReactMarkdown>
+                  
                 ) : (
                   <>
                     <ReactMarkdown remarkPlugins={[remarkGfm, remakerBreaks]}>{message.text}</ReactMarkdown>

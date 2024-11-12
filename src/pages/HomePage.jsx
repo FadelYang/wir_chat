@@ -7,9 +7,9 @@ import remakerBreaks from 'remark-breaks'
 export default function HomePage() {
   const [inputMessage, setInputMessage] = useState('')
   const [isRequestPending, setIsRequestPending] = useState(false)
-  const [sessionId, setSessionId] = useState(() => sessionStorage.getItem('sessionId') || '')
+  const [sessionId, setSessionId] = useState(() => localStorage.getItem('sessionId') || '')
   const [conversations, setConversations] = useState(() => {
-    const savedConverstations = sessionStorage.getItem('conversations')
+    const savedConverstations = localStorage.getItem('conversations')
     return savedConverstations ? JSON.parse(savedConverstations) : []
   })
   const bottomOfChatArea = useRef(null)
@@ -17,8 +17,8 @@ export default function HomePage() {
 
   // If sessionId or message change, update the conversations and sessionId value
   useEffect(() => {
-    sessionStorage.setItem('conversations', JSON.stringify(conversations))
-    sessionStorage.setItem('sessionId', sessionId)
+    localStorage.setItem('conversations', JSON.stringify(conversations))
+    localStorage.setItem('sessionId', sessionId)
   }, [conversations, sessionId]);
 
   useEffect(() => {

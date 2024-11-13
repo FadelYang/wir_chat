@@ -15,7 +15,7 @@ export default function () {
 
   return (
     <>
-      <div className="sticky top-0 z-10 px-5 py-5 bg-white md:px-0">
+      <div className="sticky top-0 z-10 px-5 py-5 bg-white md:px-20">
         <div className='container flex mx-auto'>
           <div className='flex items-center gap-2'>
             <img src={wirLogo} className='w-10'/>

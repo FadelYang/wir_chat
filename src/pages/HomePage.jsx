@@ -128,12 +128,13 @@ export default function HomePage() {
 
           {/* Input area */}
           <div className={`sticky bottom-0 bg-white p-3 ${!conversations ? 'my-auto' : ''}`}>
-            <div className="flex justify-center gap-1">
+            <form className="flex justify-center gap-1">
               <textarea
                 value={inputMessage}
                 onChange={handleMessageInput}
                 onKeyDown={handleMessageInput}
                 type="text"
+                required
                 placeholder="Kirim pertanyaan"
                 className="w-1/2 px-5 py-2 border border-black resize-none rounded-xl h-11 max-h-36"
               />
@@ -143,13 +144,13 @@ export default function HomePage() {
                     Kirim
                   </button>
                 ) : (
-                  <button disabled onClick={sendQuestionMessage} className="items-start self-end px-5 text-white bg-gray-900 rounded-xl h-11 flex-shrink-1">
+                  <button type='submit' className="items-start self-end px-5 text-white bg-gray-900 rounded-xl h-11 flex-shrink-1">
                     Kirim
                   </button>
                 )
               }
               {/* End of input area */}
-            </div>
+            </form>
           </div>
         </div>
       </div>

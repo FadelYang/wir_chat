@@ -9,6 +9,7 @@ export default function () {
 
     if (confirmed) {
       localStorage.removeItem('conversations')
+      localStorage.removeItem('sessionId')
       window.location.reload()
     }
   }

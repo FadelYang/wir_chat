@@ -3,6 +3,7 @@ import NavBar from '../components/NavBar'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remakerBreaks from 'remark-breaks'
+import { v4 as uuidv4 } from 'uuid'
 
 export default function HomePage() {
   const [inputMessage, setInputMessage] = useState('')
@@ -59,8 +60,18 @@ export default function HomePage() {
     const newInputMessage = { isUser: true, text: formattedInputMessage }
     setConversations((previousMessage) => [...previousMessage, newInputMessage])
 
+    let sessionId = localStorage.getItem('sessionId')
+    
+    // Create new session_id if session_id in localStorage not found
+    if (!sessionId) {
+      console.log('lmao');
+      sessionId = uuidv4()
+      localStorage.setItem('sessionId', sessionId)
+    }
+
     const data = {
-      message: inputMessage
+      message: inputMessage,
+      session_id: sessionId
     }
 
     setIsRequestPending(true)
@@ -86,12 +97,12 @@ export default function HomePage() {
     try {
       rawBotMessage = answer.data.outputs[0].outputs[0].results.message.data.text.replace(/\n\n/gi, '&nbsp; \n')
     } catch (error) {
-      console.log(error);
       rawBotMessage = 'Gagal menjawab pertanyaan, server mengalami masalah. Silahkan hubungi tim IT Governance'
     }
 
     const botMessage = { isUser: false, text: rawBotMessage }
     setConversations((previousMessage) => [...previousMessage, botMessage])
+    setSessionId(sessionId)
   }
 
   return (
@@ -122,7 +133,7 @@ export default function HomePage() {
             {
               isRequestPending && (
                 <>
-                  <div className='bot-message' ref={bottomOfChatArea}>Loading...</div>
+                  <div className='bot-message' ref={bottomOfChatArea}>Sedang memproses, silahkan menunggu...</div>
                 </>
               )
             }

@@ -1,80 +1,86 @@
-import React, { useState, useEffect, useRef } from 'react'
-import NavBar from '../components/NavBar'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
-import remakerBreaks from 'remark-breaks'
-import { v4 as uuidv4 } from 'uuid'
+import React, { useState, useEffect, useRef } from 'react';
+import NavBar from '../components/NavBar';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import remakerBreaks from 'remark-breaks';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function HomePage() {
-  const [inputMessage, setInputMessage] = useState('')
-  const [isRequestPending, setIsRequestPending] = useState(false)
-  const [sessionId, setSessionId] = useState(() => localStorage.getItem('sessionId') || '')
+  const [inputMessage, setInputMessage] = useState('');
+  const [isRequestPending, setIsRequestPending] = useState(false);
+  const [sessionId, setSessionId] = useState(() => localStorage.getItem('sessionId') || '');
   const [conversations, setConversations] = useState(() => {
-    const savedConverstations = localStorage.getItem('conversations')
-    return savedConverstations ? JSON.parse(savedConverstations) : []
-  })
-  const bottomOfChatArea = useRef(null)
-  const latestBotMessage = useRef(null)
+    const savedConverstations = localStorage.getItem('conversations');
+    return savedConverstations ? JSON.parse(savedConverstations) : [];
+  });
+  const bottomOfChatArea = useRef(null);
+  const latestBotMessage = useRef(null);
 
   // If sessionId or message change, update the conversations and sessionId value
   useEffect(() => {
-    localStorage.setItem('conversations', JSON.stringify(conversations))
-    localStorage.setItem('sessionId', sessionId)
+    localStorage.setItem('conversations', JSON.stringify(conversations));
+    localStorage.setItem('sessionId', sessionId);
   }, [conversations, sessionId]);
 
   useEffect(() => {
     if (isRequestPending) {
-      scrollToChatArea()
-      setInputMessage('')
+      scrollToChatArea();
+      setInputMessage('');
     } else if (!isRequestPending) {
-      scrollToLatestBotMessage()
+      scrollToLatestBotMessage();
     }
-  }, [isRequestPending])
+  }, [isRequestPending]);
 
   function handleMessageInput(e) {
     if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
+      e.preventDefault();
 
       if (inputMessage) {
-        sendQuestionMessage()
+        sendQuestionMessage();
       }
     } else {
-      setInputMessage(e.target.value)
+      setInputMessage(e.target.value);
 
-      e.target.style.height = '3rem'
-      e.target.style.height = `${e.target.scrollHeight}px`
+      e.target.style.height = '3rem';
+      e.target.style.height = `${e.target.scrollHeight}px`;
     }
   }
 
   const scrollToChatArea = () => {
     bottomOfChatArea.current?.scrollIntoView({ behavior: 'smooth' });
-  }
+  };
 
   const scrollToLatestBotMessage = () => {
-    latestBotMessage.current?.scrollIntoView({ behavior: 'smooth' })
-  }
+    latestBotMessage.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
-  const sendQuestionMessage = async (e) => {
-    const formattedInputMessage = inputMessage.replace(/\n\n/gi, '&nbsp; \n')
+  const handleSendMessageClick = (e) => {
+    e.preventDefault();
+    sendQuestionMessage();
+  };
 
-    const newInputMessage = { isUser: true, text: formattedInputMessage }
-    setConversations((previousMessage) => [...previousMessage, newInputMessage])
+  const sendQuestionMessage = async () => {
 
-    let sessionId = localStorage.getItem('sessionId')
-    
+    const formattedInputMessage = inputMessage.replace(/\n\n/gi, '&nbsp; \n');
+
+    const newInputMessage = { isUser: true, text: formattedInputMessage };
+    setConversations((previousMessage) => [...previousMessage, newInputMessage]);
+
+    let sessionId = localStorage.getItem('sessionId');
+
     // Create new session_id if session_id in localStorage not found
     if (!sessionId) {
       console.log('lmao');
-      sessionId = uuidv4()
-      localStorage.setItem('sessionId', sessionId)
+      sessionId = uuidv4();
+      localStorage.setItem('sessionId', sessionId);
     }
 
     const data = {
       message: inputMessage,
       session_id: sessionId
-    }
+    };
 
-    setIsRequestPending(true)
+    setIsRequestPending(true);
 
     const response = await fetch(process.env.REACT_APP_BACKEND_URL, {
       method: 'POST',
@@ -82,28 +88,28 @@ export default function HomePage() {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
-    })
+    });
 
-    const answer = await response.json()
+    const answer = await response.json();
 
-    setIsRequestPending(false)
+    setIsRequestPending(false);
 
     if (!sessionId && data.session_id) {
-      setSessionId(data.session_id)
+      setSessionId(data.session_id);
     }
 
-    let rawBotMessage
+    let rawBotMessage;
 
     try {
-      rawBotMessage = answer.data.outputs[0].outputs[0].results.message.data.text.replace(/\n\n/gi, '&nbsp; \n')
+      rawBotMessage = answer.data.outputs[0].outputs[0].results.message.data.text.replace(/\n\n/gi, '&nbsp; \n');
     } catch (error) {
-      rawBotMessage = 'Gagal menjawab pertanyaan, server mengalami masalah. Silahkan hubungi tim IT Governance'
+      rawBotMessage = 'Gagal menjawab pertanyaan, server mengalami masalah. Silahkan hubungi tim IT Governance';
     }
 
-    const botMessage = { isUser: false, text: rawBotMessage }
-    setConversations((previousMessage) => [...previousMessage, botMessage])
-    setSessionId(sessionId)
-  }
+    const botMessage = { isUser: false, text: rawBotMessage };
+    setConversations((previousMessage) => [...previousMessage, botMessage]);
+    setSessionId(sessionId);
+  };
 
   return (
     <div className=''>
@@ -119,8 +125,8 @@ export default function HomePage() {
                 className={message.isUser ? "ml-auto bg-slate-100 py-2 px-4 rounded-2xl" : "bot-message"}
               >
                 {message.isUser ? (
-                    <ReactMarkdown remarkPlugins={[remarkGfm, remakerBreaks]}>{message.text}</ReactMarkdown>
-                  
+                  <ReactMarkdown remarkPlugins={[remarkGfm, remakerBreaks]}>{message.text}</ReactMarkdown>
+
                 ) : (
                   <>
                     <ReactMarkdown remarkPlugins={[remarkGfm, remakerBreaks]}>{message.text}</ReactMarkdown>
@@ -154,7 +160,7 @@ export default function HomePage() {
               />
               {
                 inputMessage ? (
-                  <button onClick={sendQuestionMessage} className="items-start self-end px-5 text-white bg-black rounded-xl h-11 flex-shrink-1">
+                  <button onClick={handleSendMessageClick} className="items-start self-end px-5 text-white bg-black rounded-xl h-11 flex-shrink-1">
                     Kirim
                   </button>
                 ) : (
@@ -170,5 +176,5 @@ export default function HomePage() {
       </div>
     </div>
 
-  )
+  );
 }

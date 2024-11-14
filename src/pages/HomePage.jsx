@@ -70,7 +70,6 @@ export default function HomePage() {
 
     // Create new session_id if session_id in localStorage not found
     if (!sessionId) {
-      console.log('lmao');
       sessionId = uuidv4();
       localStorage.setItem('sessionId', sessionId);
     }
@@ -114,11 +113,11 @@ export default function HomePage() {
   return (
     <div className=''>
       <NavBar />
-      <div className="flex flex-col min-h-screen">
+      <div className="container flex flex-col min-h-screen mx-auto">
         {/* Navbar */}
         <div className="flex flex-col flex-grow">
           {/* Chat area */}
-          <div className={`${!conversations ? 'hidden' : 'flex'} flex-col chat-area flex-grow md:px-56 px-20 gap-10 mt-10`}>
+          <div className={`${!conversations ? 'hidden' : 'flex'} flex-col chat-area flex-grow px-7 gap-10 mt-10 sm:px-28 xl:px-56`}>
             {conversations.map((message, index) => (
               <div
                 key={index}
@@ -148,7 +147,7 @@ export default function HomePage() {
 
           {/* Input area */}
           <div className={`sticky bottom-0 bg-white p-3 ${!conversations ? 'my-auto' : ''}`}>
-            <form className="flex justify-center gap-1">
+            <form className="flex justify-center gap-1 mx-1 sm:mx-10">
               <textarea
                 value={inputMessage}
                 onChange={handleMessageInput}
@@ -156,7 +155,7 @@ export default function HomePage() {
                 type="text"
                 required
                 placeholder="Kirim pertanyaan"
-                className="w-1/2 px-5 py-2 border border-black resize-none rounded-xl h-11 max-h-36"
+                className="w-full px-5 py-2 border border-black resize-none xl:w-1/2 sm:w-2/3 rounded-xl h-11 max-h-36"
               />
               {
                 inputMessage ? (

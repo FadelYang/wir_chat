@@ -60,7 +60,6 @@ export default function HomePage() {
   };
 
   const sendQuestionMessage = async () => {
-
     const formattedInputMessage = inputMessage.replace(/\n\n/gi, '&nbsp; \n');
 
     const newInputMessage = { isUser: true, text: formattedInputMessage };
@@ -81,13 +80,13 @@ export default function HomePage() {
 
     setIsRequestPending(true);
 
-    const response = await fetch(process.env.REACT_APP_BACKEND_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
+    // const response = await fetch(process.env.REACT_APP_BACKEND_URL, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(data)
+    // });
 
     const answer = await response.json();
 
@@ -100,7 +99,7 @@ export default function HomePage() {
     let rawBotMessage;
 
     try {
-      rawBotMessage = answer.data.outputs[0].outputs[0].results.message.data.text.replace(/\n\n/gi, '&nbsp; \n');
+      rawBotMessage = answer.data.outputs[0].outputs[0].results.message.data.text.replace(/\n\n/gi, '&nbsp; \n\n');
     } catch (error) {
       rawBotMessage = 'Gagal menjawab pertanyaan, server mengalami masalah. Silahkan hubungi tim IT Governance';
     }
@@ -113,11 +112,16 @@ export default function HomePage() {
   return (
     <div className=''>
       <NavBar />
-      <div className="container flex flex-col min-h-screen mx-auto">
+      <div className={`container flex flex-col min-h-screen mx-auto ${conversations.length == 0 ? '-mt-20' : ''}`}>
         {/* Navbar */}
-        <div className="flex flex-col flex-grow">
+        <div className={`flex flex-col ${conversations.length == 0 ? 'my-auto' : 'flex-grow'}`}>
+          {/* Render this component if there is no conversations */}
+          <div className={`text-center ${conversations.length === 0 ? 'block px-7' : 'hidden'}`}>
+            <h1 className='mb-3 text-2xl font-bold sm:text-3xl'>Ada yang bisa saya bantu?</h1>
+          </div>
+
           {/* Chat area */}
-          <div className={`${!conversations ? 'hidden' : 'flex'} flex-col chat-area flex-grow px-7 gap-10 mt-10 sm:px-28 xl:px-56`}>
+          <div className={`${conversations.length === 0 ? 'hidden' : 'flex mt-10'} flex-col chat-area flex-grow px-7 gap-10 sm:px-28 xl:px-56`}>
             {conversations.map((message, index) => (
               <div
                 key={index}
@@ -171,9 +175,24 @@ export default function HomePage() {
               {/* End of input area */}
             </form>
           </div>
+
+          {/* Render this component if there is no conerstations */}
+          <div className={`flex justify-center gap-2 flex-wrap mt-3 px-7 ${conversations.length === 0 ? 'block' : 'hidden'}`}>
+            <button
+              className='template-question'
+              value='Adakah bisnis unit yang relevan untuk membuat platform eCommerce dengan pengalaman AR?'
+            >
+              Adakah bisnis unit yang...
+            </button>
+            <button
+              className='template-question'
+              value='Apa yang kamu ketahui tentang AR&Co?'>
+              Apa yang kamu ketahui...
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </div >
 
   );
-}
+};

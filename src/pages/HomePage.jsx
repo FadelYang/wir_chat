@@ -31,18 +31,23 @@ export default function HomePage() {
     }
   }, [isRequestPending]);
 
+  useEffect(() => {
+    const inputTextArea = document.querySelector('#messageInputTextarea');
+    inputTextArea.style.height = '3rem';
+    inputTextArea.style.height = `${inputTextArea.scrollHeight}px`;
+  }, [inputMessage]);
+
   function handleMessageInput(e) {
+    setInputMessage(e.target.value);
+  }
+
+  function handleEnterInput(e) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
 
       if (inputMessage) {
         sendQuestionMessage();
       }
-    } else {
-      setInputMessage(e.target.value);
-
-      e.target.style.height = '3rem';
-      e.target.style.height = `${e.target.scrollHeight}px`;
     }
   }
 
@@ -57,6 +62,10 @@ export default function HomePage() {
   const handleSendMessageClick = (e) => {
     e.preventDefault();
     sendQuestionMessage();
+  };
+
+  const handleTemplateMessageButtonClick = (e) => {
+    setInputMessage(e.target.value);
   };
 
   const sendQuestionMessage = async () => {
@@ -80,13 +89,13 @@ export default function HomePage() {
 
     setIsRequestPending(true);
 
-    // const response = await fetch(process.env.REACT_APP_BACKEND_URL, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(data)
-    // });
+    const response = await fetch(process.env.REACT_APP_BACKEND_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
 
     const answer = await response.json();
 
@@ -112,7 +121,7 @@ export default function HomePage() {
   return (
     <div className=''>
       <NavBar />
-      <div className={`container flex flex-col min-h-screen mx-auto ${conversations.length == 0 ? '-mt-20' : ''}`}>
+      <div className={`container flex flex-col min-h-screen mx-auto ${conversations.length == 0 ? '' : ''}`}>
         {/* Navbar */}
         <div className={`flex flex-col ${conversations.length == 0 ? 'my-auto' : 'flex-grow'}`}>
           {/* Render this component if there is no conversations */}
@@ -155,9 +164,10 @@ export default function HomePage() {
               <textarea
                 value={inputMessage}
                 onChange={handleMessageInput}
-                onKeyDown={handleMessageInput}
+                onKeyDown={handleEnterInput}
                 type="text"
                 required
+                id="messageInputTextarea"
                 placeholder="Kirim pertanyaan"
                 className="w-full px-5 py-2 border border-black resize-none xl:w-1/2 sm:w-2/3 rounded-xl h-11 max-h-36"
               />
@@ -179,12 +189,14 @@ export default function HomePage() {
           {/* Render this component if there is no conerstations */}
           <div className={`flex justify-center gap-2 flex-wrap mt-3 px-7 ${conversations.length === 0 ? 'block' : 'hidden'}`}>
             <button
+              onClick={handleTemplateMessageButtonClick}
               className='template-question'
               value='Adakah bisnis unit yang relevan untuk membuat platform eCommerce dengan pengalaman AR?'
             >
               Adakah bisnis unit yang...
             </button>
             <button
+              onClick={handleTemplateMessageButtonClick}
               className='template-question'
               value='Apa yang kamu ketahui tentang AR&Co?'>
               Apa yang kamu ketahui...

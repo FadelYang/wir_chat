@@ -28,6 +28,7 @@ p > br {
   @apply px-2 py-1 text-xs sm:text-base text-center border border-black rounded-full
 }
 
+
 /* div {
   border: 1px solid black;
   margin: 1px;

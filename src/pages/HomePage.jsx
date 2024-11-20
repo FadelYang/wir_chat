@@ -120,8 +120,8 @@ export default function HomePage() {
 
   return (
     <div className=''>
-      <NavBar />
       <div className={`container flex flex-col min-h-screen mx-auto ${conversations.length == 0 ? '' : ''}`}>
+        <NavBar />
         {/* Navbar */}
         <div className={`flex flex-col ${conversations.length == 0 ? 'my-auto' : 'flex-grow'}`}>
           {/* Render this component if there is no conversations */}

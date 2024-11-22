@@ -121,10 +121,7 @@ export default function HomePage() {
 
   return (
     <>
-      {/* <div className={`-z-10 absolute inset-0 bg-[url('01.png')] opacity-80 bg-contain bg-center bg-no-repeat`}>
-
-      </div> */}
-      <div className={`container-fluid flex flex-col min-h-screen mx-auto ${conversations.length == 0 ? '' : ''}`}>
+      <div className={`container-fluid flex flex-col min-h-screen mx-auto ${conversations.length == 0 ? '' : ''}`} style={{ backgroundImage: '/01.logo.png' }}>
         <NavBar />
         {/* Navbar */}
         <div className={`flex flex-col ${conversations.length == 0 ? 'my-auto' : 'flex-grow'}`}>
@@ -184,7 +181,7 @@ export default function HomePage() {
                     Kirim
                   </button>
                 ) : (
-                  <button type='submit' className="items-start self-end px-5 text-white bg-gray-900 rounded-xl h-11 flex-shrink-1">
+                  <button type='submit' className="items-start self-end px-5 text-white bg-black hover:bg-gray-900 rounded-xl h-11 flex-shrink-1">
                     Kirim
                   </button>
                 )
@@ -212,5 +209,6 @@ export default function HomePage() {
         </div>
       </div>
     </ >
+
   );
 };

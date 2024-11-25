@@ -25,9 +25,25 @@ p > br {
 }
 
 .template-question {
-  @apply px-2 py-1 text-xs sm:text-base text-center border border-black rounded-full
+  @apply px-2 py-1 text-xs sm:text-base text-center border border-black rounded-full bg-white
 }
 
+@keyframes glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 0px #dc2626)
+            drop-shadow(0 0 0px #dc2626)
+            drop-shadow(0 0 0px #dc2626);
+  }
+  50% {
+    filter: drop-shadow(0 0 1px #dc2626)
+            drop-shadow(0 0 1px #dc2626)
+            drop-shadow(0 0 1px #dc2626);
+  }
+}
+
+.main-logo {
+  animation: glow 3s ease-in-out infinite;
+}
 
 /* div {
   border: 1px solid black;

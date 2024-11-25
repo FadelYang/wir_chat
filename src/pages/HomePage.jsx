@@ -3,6 +3,7 @@ import NavBar from '../components/NavBar';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remakerBreaks from 'remark-breaks';
+import wirLogo from '/logo.png';
 import { v4 as uuidv4 } from 'uuid';
 
 export default function HomePage() {
@@ -119,13 +120,19 @@ export default function HomePage() {
   };
 
   return (
-    <div className=''>
-      <div className={`container flex flex-col min-h-screen mx-auto ${conversations.length == 0 ? '' : ''}`}>
+    <>
+      {/* <div className={`-z-10 absolute inset-0 bg-[url('01.png')] opacity-80 bg-contain bg-center bg-no-repeat`}>
+
+      </div> */}
+      <div className={`container-fluid flex flex-col min-h-screen mx-auto ${conversations.length == 0 ? '' : ''}`}>
         <NavBar />
         {/* Navbar */}
         <div className={`flex flex-col ${conversations.length == 0 ? 'my-auto' : 'flex-grow'}`}>
           {/* Render this component if there is no conversations */}
           <div className={`text-center ${conversations.length === 0 ? 'block px-7' : 'hidden'}`}>
+            <div className='flex justify-center main-logo'>
+              <img src={wirLogo} className='relative z-10 w-56' />
+            </div>
             <h1 className='mb-3 text-2xl font-bold sm:text-3xl'>Ada yang bisa saya bantu?</h1>
           </div>
 
@@ -159,7 +166,7 @@ export default function HomePage() {
           {/* End of chat area */}
 
           {/* Input area */}
-          <div className={`sticky bottom-0 bg-white p-3 ${!conversations ? 'my-auto' : ''}`}>
+          <div className={`sticky bottom-0  p-3 ${!conversations ? 'my-auto' : ''}`}>
             <form className="flex justify-center gap-1 mx-1 sm:mx-10">
               <textarea
                 value={inputMessage}
@@ -173,7 +180,7 @@ export default function HomePage() {
               />
               {
                 inputMessage ? (
-                  <button onClick={handleSendMessageClick} className="items-start self-end px-5 text-white bg-black rounded-xl h-11 flex-shrink-1">
+                  <button onClick={handleSendMessageClick} className="items-start self-end px-5 text-white bg-black border rounded-xl h-11 flex-shrink-1">
                     Kirim
                   </button>
                 ) : (
@@ -204,7 +211,6 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-    </div >
-
+    </ >
   );
 };

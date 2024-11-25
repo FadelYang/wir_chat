@@ -1,25 +1,24 @@
-import profilePlaceholder from './../assets/profile-placeholder.jpeg'
-import wirLogo from '/wir.png'
+import wirLogo from '/logo.png';
 
 export default function () {
   const clearChat = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const confirmed = window.confirm('Apakah kamu yakin? chat yang ada sekarang akan terhapus')
+    const confirmed = window.confirm('Apakah kamu yakin? chat yang ada sekarang akan terhapus');
 
     if (confirmed) {
-      localStorage.removeItem('conversations')
-      localStorage.removeItem('sessionId')
-      window.location.reload()
+      localStorage.removeItem('conversations');
+      localStorage.removeItem('sessionId');
+      window.location.reload();
     }
-  }
+  };
 
   return (
     <>
       <div className="sticky top-0 z-10 px-5 py-5 bg-white md:px-20">
         <div className='container flex mx-auto'>
           <div className='flex items-center gap-2'>
-            <img src={wirLogo} className='w-10'/>
+            <img src={wirLogo} className='w-10' />
             <div>WIR Chat</div>
           </div>
           <div className='flex items-center ms-auto'>
@@ -29,5 +28,5 @@ export default function () {
         </div>
       </div>
     </>
-  )
+  );
 }

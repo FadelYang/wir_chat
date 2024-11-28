@@ -90,8 +90,6 @@ export default function HomePage() {
       languageCode = 'id'
     }
 
-    console.log(languageCode);
-
     const data = {
       message: inputMessage,
       session_id: sessionId,

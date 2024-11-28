@@ -83,9 +83,19 @@ export default function HomePage() {
       localStorage.setItem('sessionId', sessionId);
     }
 
+    // Handle selected language
+    let languageCode = localStorage.getItem('languageCode')
+
+    if (!languageCode) {
+      languageCode = 'id'
+    }
+
+    console.log(languageCode);
+
     const data = {
       message: inputMessage,
-      session_id: sessionId
+      session_id: sessionId,
+      language: languageCode
     };
 
     setIsRequestPending(true);

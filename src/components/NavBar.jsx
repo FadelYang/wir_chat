@@ -1,6 +1,6 @@
 import wirLogo from '/wir.png';
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import chinaFlag from '/flag/china.png';
 import indonesiaFlag from '/flag/flag.png';
 import japanFlag from '/flag/japan.png';
@@ -16,22 +16,24 @@ export default function () {
     if (confirmed) {
       localStorage.removeItem('conversations');
       localStorage.removeItem('sessionId');
-      window.location.reload();
-      localStorage.removeItem('conversations');
-      localStorage.removeItem('sessionId');
+      localStorage.removeItem('languageCode');
       window.location.reload();
     }
   };
 
   const languages = [
-    { imageSize: '25px', flag: chinaFlag, name: 'English', code: 'en' },
-    { imageSize: '25px', flag: indonesiaFlag, name: 'Spanish', code: 'es' },
-    { imageSize: '25px', flag: japanFlag, name: 'French', code: 'fr' },
-    { imageSize: '25px', flag: unitedKingdomFlag, name: 'German', code: 'de' },
+    { imageSize: '25px', flag: indonesiaFlag, name: 'Indonesian', code: 'id' },
+    { imageSize: '25px', flag: chinaFlag, name: 'Chinese', code: 'zh-cn' },
+    { imageSize: '25px', flag: japanFlag, name: 'Japanese', code: 'ja' },
+    { imageSize: '25px', flag: unitedKingdomFlag, name: 'English', code: 'en' },
   ];
 
   const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
 
+  useEffect(() => {
+    localStorage.setItem('languageCode', selectedLanguage.code)
+  }, [selectedLanguage]);
+  
   return (
     <>
       <div className="sticky top-0 z-10 px-5 py-5 bg-white border border-b-gray-300 md:px-20 ">
@@ -52,9 +54,9 @@ export default function () {
                     </div>
                   </ListboxButton>
                   <ListboxOptions className="absolute z-50 mt-1 overflow-auto bg-white rounded-md shadow-lg min-w-48">
-                    {languages.map((language) => (
+                    {languages.map((language, index) => (
                       <ListboxOption
-                        key={language.code}
+                        key={index}
                         value={language}
                         className={({ active, selected }) =>
                           `${active ? 'text-white bg-red-500' : ''} ${selected ? 'font-semibold' : ''} cursor-pointer select-none relative py-2 pl-10 pr-4`
@@ -81,7 +83,7 @@ export default function () {
                             )}
                             <div className='flex gap-1'>
                               <img src={language.flag} width={language.imageSize}></img>
-                              <div className=''>{selectedLanguage.name}</div>
+                              <div className=''>{language.name}</div>
                             </div>
                           </>
                         )}

@@ -16,6 +16,8 @@ export default function HomePage() {
   });
   const bottomOfChatArea = useRef(null);
   const latestBotMessage = useRef(null);
+  const [loadingText, setLoadingText] = useState('Sedang memproses, silahkan menunggu...');
+  const [errorMessage, setErrorMessage] = useState('Gagal menjawab pertanyaan, server mengalami masalah. Silahkan hubungi tim IT Governance')
 
   // If sessionId or message change, update the conversations and sessionId value
   useEffect(() => {
@@ -84,10 +86,43 @@ export default function HomePage() {
     }
 
     // Handle selected language
-    let languageCode = localStorage.getItem('languageCode')
+    let languageCode = localStorage.getItem('languageCode');
+
+    const languageLibrary = {
+      id: {
+        loadingText: 'Sedang memproses, silahkan menunggu...',
+        errorMessage: 'Gagal menjawab pertanyaan, server mengalami masalah. Silahkan hubungi tim IT Governance.',
+      },
+      en: {
+        loadingText: 'Processing, please wait...',
+        errorMessage: 'Failed to answer the question. The server encountered an issue. Please contact the IT Governance team.',
+      },
+      ja: {
+        loadingText: '処理中です。お待ちください...',
+        errorMessage: '質問に答えることができませんでした。サーバーに問題が発生しました。ITガバナンスチームに連絡してください。',
+      },
+      zhCn: {
+        loadingText: '处理中，请稍候...',
+        errorMessage: '未能回答问题，服务器遇到问题。请联系IT治理团队。',
+      },
+    };
 
     if (!languageCode) {
-      languageCode = 'id'
+      languageCode = 'id';
+    }
+
+    if (languageCode === 'id') {
+      setLoadingText(languageLibrary.id.loadingText);
+      setErrorMessage(languageLibrary.id.errorMessage);
+    } else if (languageCode === 'en') {
+      setLoadingText(languageLibrary.en.loadingText);
+      setErrorMessage(languageLibrary.en.errorMessage);
+    } else if (languageCode === 'ja') {
+      setLoadingText(languageLibrary.ja.loadingText);
+      setErrorMessage(languageLibrary.ja.errorMessage);
+    } else if (languageCode === 'zh-cn') {
+      setLoadingText(languageLibrary.zhCn.loadingText);
+      setErrorMessage(languageLibrary.zhCn.errorMessage);
     }
 
     const data = {
@@ -119,7 +154,7 @@ export default function HomePage() {
     try {
       rawBotMessage = answer.data.outputs[0].outputs[0].results.message.data.text.replace(/\n\n/gi, '&nbsp; \n\n');
     } catch (error) {
-      rawBotMessage = 'Gagal menjawab pertanyaan, server mengalami masalah. Silahkan hubungi tim IT Governance';
+      rawBotMessage = {errorMessage};
     }
 
     const botMessage = { isUser: false, text: rawBotMessage };
@@ -163,7 +198,7 @@ export default function HomePage() {
             {
               isRequestPending && (
                 <>
-                  <div className='bot-message' ref={bottomOfChatArea}>Sedang memproses, silahkan menunggu...</div>
+                  <div className='bot-message' ref={bottomOfChatArea}>{loadingText}.</div>
                 </>
               )
             }

@@ -128,7 +128,7 @@ export default function HomePage() {
           {/* Render this component if there is no conversations */}
           <div className={`text-center ${conversations.length === 0 ? 'block px-7' : 'hidden'}`}>
             <div className='flex justify-center main-logo'>
-              <img src={wirLogo} className='relative z-10 w-56' />
+              <img src={wirLogo} className='relative w-56' />
             </div>
             <h1 className='mb-3 text-2xl font-bold sm:text-3xl'>Ada yang bisa saya bantu?</h1>
           </div>

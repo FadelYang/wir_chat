@@ -6,6 +6,49 @@ import remakerBreaks from 'remark-breaks';
 import wirLogo from '/logo.png';
 import { v4 as uuidv4 } from 'uuid';
 
+const languageLibrary = {
+  id: {
+    loadingText: 'Sedang memproses, silahkan menunggu...',
+    errorMessage: 'Gagal menjawab pertanyaan, server mengalami masalah. Silahkan hubungi tim IT Governance.',
+    suggestMessage1: 'Adakah bisnis unit yang relevan untuk membuat platform eCommerce dengan pengalaman AR?',
+    suggestMessage2: 'Apa yang kamu ketahui tentang AR&Co?',
+    inputPlaceholder: 'Kirim pertanyaan...',
+    heroText: 'Ada yang bisa saya bantu?',
+    sendButtonText: 'Kirim',
+    startNewChatButtonText: 'Mulai chat baru'
+  },
+  en: {
+    loadingText: 'Processing, please wait...',
+    errorMessage: 'Failed to answer the question. The server encountered an issue. Please contact the IT Governance team.',
+    suggestMessage1: 'Is there a relevant business unit to create an eCommerce platform with an AR experience?',
+    suggestMessage2: 'What do you know about AR&Co?',
+    inputPlaceholder: 'Send a question...',
+    heroText: 'Can I help you?',
+    sendButtonText: 'Send',
+    startNewChatButtonText: 'Start a new chat'
+  },
+  ja: {
+    loadingText: '処理中です。お待ちください...',
+    errorMessage: '質問に答えることができませんでした。サーバーに問題が発生しました。ITガバナンスチームに連絡してください。',
+    suggestMessage1: 'AR体験を備えたeコマースプラットフォームを作成するために関連するビジネスユニットはありますか？',
+    suggestMessage2: 'AR&Coについて何を知っていますか？',
+    inputPlaceholder: '質問を送信...',
+    heroText: 'お手伝いしますか？',
+    sendButtonText: '送信',
+    startNewChatButtonText: '新しいチャットを開始'
+  },
+  zhCn: {
+    loadingText: '处理中，请稍候...',
+    errorMessage: '未能回答问题，服务器遇到问题。请联系IT治理团队。',
+    suggestMessage1: '是否有相关的业务部门可以创建带有AR体验的电子商务平台？',
+    suggestMessage2: '你对AR&Co了解多少？',
+    inputPlaceholder: '发送问题...',
+    heroText: '需要帮忙吗？',
+    sendButtonText: '发送',
+    startNewChatButtonText: '开始新聊天',
+  },
+};
+
 export default function HomePage() {
   const [inputMessage, setInputMessage] = useState('');
   const [isRequestPending, setIsRequestPending] = useState(false);
@@ -16,8 +59,15 @@ export default function HomePage() {
   });
   const bottomOfChatArea = useRef(null);
   const latestBotMessage = useRef(null);
-  const [loadingText, setLoadingText] = useState('Sedang memproses, silahkan menunggu...');
-  const [errorMessage, setErrorMessage] = useState('Gagal menjawab pertanyaan, server mengalami masalah. Silahkan hubungi tim IT Governance')
+  const [loadingText, setLoadingText] = useState(languageLibrary.id.loadingText);
+  const [errorMessage, setErrorMessage] = useState(languageLibrary.id.errorMessage);
+  const [suggestMessage1, setSuggestMessage1] = useState(languageLibrary.id.suggestMessage1);
+  const [suggestMessage2, setSuggestMessage2] = useState(languageLibrary.id.suggestMessage2);
+  const [inputPlaceholder, setInputPlaceholder] = useState(languageLibrary.id.inputPlaceholder);
+  const [heroText, setHeroText] = useState(languageLibrary.id.heroText);
+  const [languageCode, setlanguageCode] = useState('id');
+  const [sendButtonText, setSendButtonText] = useState(languageLibrary.id.sendButtonText);
+  const [startNewChatButtonText, setStartNewChatButtonText] = useState(languageLibrary.id.startNewChatButtonText)
 
   // If sessionId or message change, update the conversations and sessionId value
   useEffect(() => {
@@ -68,7 +118,58 @@ export default function HomePage() {
   };
 
   const handleTemplateMessageButtonClick = (e) => {
+    handleSelectedLanguage();
     setInputMessage(e.target.value);
+  };
+
+  const handleSelectedLanguage = () => {
+    // Handle selected language
+    let languageCode = localStorage.getItem('languageCode');
+
+    if (!languageCode) {
+      languageCode = 'id';
+    }
+
+    if (languageCode === 'id') {
+      setLoadingText(languageLibrary.id.loadingText);
+      setErrorMessage(languageLibrary.id.errorMessage);
+      setSuggestMessage1(languageLibrary.id.suggestMessage1);
+      setSuggestMessage2(languageLibrary.id.suggestMessage2);
+      setInputPlaceholder(languageLibrary.id.inputPlaceholder);
+      setHeroText(languageLibrary.id.heroText);
+      setSendButtonText(languageLibrary.id.sendButtonText);
+      setStartNewChatButtonText(languageLibrary.id.startNewChatButtonText);
+    } else if (languageCode === 'en') {
+      setLoadingText(languageLibrary.en.loadingText);
+      setErrorMessage(languageLibrary.en.errorMessage);
+      setSuggestMessage1(languageLibrary.en.suggestMessage1);
+      setSuggestMessage2(languageLibrary.en.suggestMessage2);
+      setInputPlaceholder(languageLibrary.en.inputPlaceholder);
+      setHeroText(languageLibrary.en.heroText);
+      setSendButtonText(languageLibrary.en.sendButtonText);
+      setStartNewChatButtonText(languageLibrary.en.startNewChatButtonText);
+    } else if (languageCode === 'ja') {
+      setLoadingText(languageLibrary.ja.loadingText);
+      setErrorMessage(languageLibrary.ja.errorMessage);
+      setSuggestMessage1(languageLibrary.ja.suggestMessage1);
+      setSuggestMessage2(languageLibrary.ja.suggestMessage2);
+      setInputPlaceholder(languageLibrary.ja.inputPlaceholder);
+      setHeroText(languageLibrary.ja.heroText);
+      setSendButtonText(languageLibrary.ja.sendButtonText);
+      setStartNewChatButtonText(languageLibrary.ja.startNewChatButtonText);
+    } else if (languageCode === 'zh-cn') {
+      setLoadingText(languageLibrary.zhCn.loadingText);
+      setErrorMessage(languageLibrary.zhCn.errorMessage);
+      setSuggestMessage1(languageLibrary.zhCn.suggestMessage1);
+      setSuggestMessage2(languageLibrary.zhCn.suggestMessage2);
+      setInputPlaceholder(languageLibrary.zhCn.inputPlaceholder);
+      setHeroText(languageLibrary.zhCn.heroText);
+      setSendButtonText(languageLibrary.zhCn.sendButtonText);
+      setStartNewChatButtonText(languageLibrary.zhCn.startNewChatButtonText);
+    }
+
+    setlanguageCode(languageCode);
+    return languageCode;
   };
 
   const sendQuestionMessage = async () => {
@@ -85,50 +186,12 @@ export default function HomePage() {
       localStorage.setItem('sessionId', sessionId);
     }
 
-    // Handle selected language
-    let languageCode = localStorage.getItem('languageCode');
-
-    const languageLibrary = {
-      id: {
-        loadingText: 'Sedang memproses, silahkan menunggu...',
-        errorMessage: 'Gagal menjawab pertanyaan, server mengalami masalah. Silahkan hubungi tim IT Governance.',
-      },
-      en: {
-        loadingText: 'Processing, please wait...',
-        errorMessage: 'Failed to answer the question. The server encountered an issue. Please contact the IT Governance team.',
-      },
-      ja: {
-        loadingText: '処理中です。お待ちください...',
-        errorMessage: '質問に答えることができませんでした。サーバーに問題が発生しました。ITガバナンスチームに連絡してください。',
-      },
-      zhCn: {
-        loadingText: '处理中，请稍候...',
-        errorMessage: '未能回答问题，服务器遇到问题。请联系IT治理团队。',
-      },
-    };
-
-    if (!languageCode) {
-      languageCode = 'id';
-    }
-
-    if (languageCode === 'id') {
-      setLoadingText(languageLibrary.id.loadingText);
-      setErrorMessage(languageLibrary.id.errorMessage);
-    } else if (languageCode === 'en') {
-      setLoadingText(languageLibrary.en.loadingText);
-      setErrorMessage(languageLibrary.en.errorMessage);
-    } else if (languageCode === 'ja') {
-      setLoadingText(languageLibrary.ja.loadingText);
-      setErrorMessage(languageLibrary.ja.errorMessage);
-    } else if (languageCode === 'zh-cn') {
-      setLoadingText(languageLibrary.zhCn.loadingText);
-      setErrorMessage(languageLibrary.zhCn.errorMessage);
-    }
+    const selectedLanguageCode = handleSelectedLanguage();
 
     const data = {
       message: inputMessage,
       session_id: sessionId,
-      language: languageCode
+      language: selectedLanguageCode
     };
 
     setIsRequestPending(true);
@@ -154,7 +217,7 @@ export default function HomePage() {
     try {
       rawBotMessage = answer.data.outputs[0].outputs[0].results.message.data.text.replace(/\n\n/gi, '&nbsp; \n\n');
     } catch (error) {
-      rawBotMessage = {errorMessage};
+      rawBotMessage = { errorMessage };
     }
 
     const botMessage = { isUser: false, text: rawBotMessage };
@@ -165,7 +228,7 @@ export default function HomePage() {
   return (
     <>
       <div className={`container-fluid flex flex-col min-h-screen mx-auto ${conversations.length == 0 ? '' : ''}`} style={{ backgroundImage: '/01.logo.png' }}>
-        <NavBar />
+        <NavBar handleSelectedLanguage={handleSelectedLanguage} startNewChatButtonText={startNewChatButtonText}/>
         {/* Navbar */}
         <div className={`flex flex-col ${conversations.length == 0 ? 'my-auto' : 'flex-grow'}`}>
           {/* Render this component if there is no conversations */}
@@ -173,7 +236,7 @@ export default function HomePage() {
             <div className='flex justify-center main-logo'>
               <img src={wirLogo} className='relative w-56' />
             </div>
-            <h1 className='mb-3 text-2xl font-bold sm:text-3xl'>Ada yang bisa saya bantu?</h1>
+            <h1 className='mb-3 text-2xl font-bold sm:text-3xl'>{heroText}</h1>
           </div>
 
           {/* Chat area */}
@@ -215,17 +278,17 @@ export default function HomePage() {
                 type="text"
                 required
                 id="messageInputTextarea"
-                placeholder="Kirim pertanyaan"
-                className="w-full px-5 py-2 border border-black resize-none xl:w-1/2 sm:w-2/3 rounded-xl h-11 max-h-36"
+                placeholder={inputPlaceholder}
+                className="box-border w-full px-5 py-2 border border-black resize-none xl:w-1/2 sm:w-2/3 rounded-xl h-11 max-h-36"
               />
               {
                 inputMessage ? (
-                  <button onClick={handleSendMessageClick} className="items-start self-end px-5 text-white bg-black border rounded-xl h-11 flex-shrink-1">
-                    Kirim
+                  <button onClick={handleSendMessageClick} className="items-start self-end inline-block px-4 text-white bg-black hover:bg-gray-900 rounded-xl h-11 whitespace-nowrap1">
+                    {sendButtonText}
                   </button>
                 ) : (
-                  <button type='submit' className="items-start self-end px-5 text-white bg-black hover:bg-gray-900 rounded-xl h-11 flex-shrink-1">
-                    Kirim
+                  <button type='submit' className="items-start self-end inline-block px-4 text-white bg-black hover:bg-gray-900 rounded-xl h-11 whitespace-nowrap">
+                    {sendButtonText}
                   </button>
                 )
               }
@@ -234,19 +297,23 @@ export default function HomePage() {
           </div>
 
           {/* Render this component if there is no conerstations */}
-          <div className={`flex justify-center gap-2 flex-wrap mt-3 px-7 ${conversations.length === 0 ? 'block' : 'hidden'}`}>
+          <div className={`flex justify-center gap-2 flex-wrap mt-0 md:mt-3  px-7 ${conversations.length === 0 ? 'block' : 'hidden'}`}>
             <button
               onClick={handleTemplateMessageButtonClick}
               className='template-question'
-              value='Adakah bisnis unit yang relevan untuk membuat platform eCommerce dengan pengalaman AR?'
+              value={suggestMessage1}
             >
-              Adakah bisnis unit yang...
+              {languageCode === 'id' || languageCode === 'en'
+                ? `${suggestMessage1.substring(0, 25)}...`
+                : `${suggestMessage1.substring(0, 10)}...`}
             </button>
             <button
               onClick={handleTemplateMessageButtonClick}
               className='template-question'
-              value='Apa yang kamu ketahui tentang AR&Co?'>
-              Apa yang kamu ketahui...
+              value={suggestMessage2}>
+              {languageCode === 'id' || languageCode === 'en'
+                ? `${suggestMessage2.substring(0, 25)}...`
+                : `${suggestMessage2.substring(0, 10)}...`}
             </button>
           </div>
         </div>

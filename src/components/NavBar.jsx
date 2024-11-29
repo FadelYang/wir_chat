@@ -1,4 +1,4 @@
-import wirLogo from '/wir.png';
+import wirLogo from '/logo.png';
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react';
 import { useEffect, useState } from 'react';
 import chinaFlag from '/flag/china.png';
@@ -6,7 +6,7 @@ import indonesiaFlag from '/flag/flag.png';
 import japanFlag from '/flag/japan.png';
 import unitedKingdomFlag from '/flag/united-kingdom.png';
 
-export default function () {
+export default function ({ handleSelectedLanguage, startNewChatButtonText }) {
   const clearChat = (e) => {
     e.preventDefault();
     e.preventDefault();
@@ -31,15 +31,16 @@ export default function () {
   const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
 
   useEffect(() => {
-    localStorage.setItem('languageCode', selectedLanguage.code)
+    localStorage.setItem('languageCode', selectedLanguage.code);
+    handleSelectedLanguage();
   }, [selectedLanguage]);
-  
+
   return (
     <>
       <div className="sticky top-0 z-10 px-5 py-5 bg-white border border-b-gray-300 md:px-20 ">
         <div className='container flex mx-auto'>
           <div className='flex items-center gap-2'>
-            <img src={wirLogo} className='w-10' />
+            <img src={wirLogo} className='w-12' />
             <div className='hidden md:block'>WIR Chat</div>
           </div>
           <div className='flex items-center gap-1 ms-auto'>
@@ -93,7 +94,7 @@ export default function () {
                 </div>
               </Listbox>
             </div>
-            <button onClick={clearChat} className='px-5 py-2 text-white bg-black rounded-md hover:bg-gray-900 hover:cursor-pointer'>Mulai Chat Baru</button>
+            <button onClick={clearChat} className='px-5 py-2 text-white bg-black rounded-md hover:bg-gray-900 hover:cursor-pointer'>{startNewChatButtonText}</button>
           </div>
         </div>
       </div>

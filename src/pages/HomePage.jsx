@@ -15,7 +15,8 @@ const languageLibrary = {
     inputPlaceholder: 'Kirim pertanyaan...',
     heroText: 'Ada yang bisa saya bantu?',
     sendButtonText: 'Kirim',
-    startNewChatButtonText: 'Mulai chat baru'
+    startNewChatButtonText: 'Mulai chat baru',
+    startNewChatConfirmationText: 'Apakah kamu yakin? chat yang ada sekarang akan terhapus'
   },
   en: {
     loadingText: 'Processing, please wait...',
@@ -25,7 +26,8 @@ const languageLibrary = {
     inputPlaceholder: 'Send a question...',
     heroText: 'Can I help you?',
     sendButtonText: 'Send',
-    startNewChatButtonText: 'Start a new chat'
+    startNewChatButtonText: 'Start a new chat',
+    startNewChatConfirmationText: 'Are you sure? The current chat will be deleted',
   },
   ja: {
     loadingText: '処理中です。お待ちください...',
@@ -35,7 +37,8 @@ const languageLibrary = {
     inputPlaceholder: '質問を送信...',
     heroText: 'お手伝いしますか？',
     sendButtonText: '送信',
-    startNewChatButtonText: '新しいチャットを開始'
+    startNewChatButtonText: '新しいチャットを開始',
+    startNewChatConfirmationText: 'よろしいですか？現在のチャットが削除されます',
   },
   zhCn: {
     loadingText: '处理中，请稍候...',
@@ -46,6 +49,7 @@ const languageLibrary = {
     heroText: '需要帮忙吗？',
     sendButtonText: '发送',
     startNewChatButtonText: '开始新聊天',
+    startNewChatConfirmationText: '你确定吗？当前的聊天将被删除',
   },
 };
 
@@ -65,9 +69,10 @@ export default function HomePage() {
   const [suggestMessage2, setSuggestMessage2] = useState(languageLibrary.id.suggestMessage2);
   const [inputPlaceholder, setInputPlaceholder] = useState(languageLibrary.id.inputPlaceholder);
   const [heroText, setHeroText] = useState(languageLibrary.id.heroText);
-  const [languageCode, setlanguageCode] = useState('id');
+  const [languageCode, setlanguageCode] = useState(() => localStorage.getItem('languageCode') || 'id');
   const [sendButtonText, setSendButtonText] = useState(languageLibrary.id.sendButtonText);
-  const [startNewChatButtonText, setStartNewChatButtonText] = useState(languageLibrary.id.startNewChatButtonText)
+  const [startNewChatButtonText, setStartNewChatButtonText] = useState(languageLibrary.id.startNewChatButtonText);
+  const [startNewChatConfirmationText, setStartNewChatConfirmationText] = useState(languageLibrary.id.startNewChatConfirmationText);
 
   // If sessionId or message change, update the conversations and sessionId value
   useEffect(() => {
@@ -139,6 +144,7 @@ export default function HomePage() {
       setHeroText(languageLibrary.id.heroText);
       setSendButtonText(languageLibrary.id.sendButtonText);
       setStartNewChatButtonText(languageLibrary.id.startNewChatButtonText);
+      setStartNewChatConfirmationText(languageLibrary.id.startNewChatConfirmationText);
     } else if (languageCode === 'en') {
       setLoadingText(languageLibrary.en.loadingText);
       setErrorMessage(languageLibrary.en.errorMessage);
@@ -148,6 +154,7 @@ export default function HomePage() {
       setHeroText(languageLibrary.en.heroText);
       setSendButtonText(languageLibrary.en.sendButtonText);
       setStartNewChatButtonText(languageLibrary.en.startNewChatButtonText);
+      setStartNewChatConfirmationText(languageLibrary.en.startNewChatConfirmationText);
     } else if (languageCode === 'ja') {
       setLoadingText(languageLibrary.ja.loadingText);
       setErrorMessage(languageLibrary.ja.errorMessage);
@@ -157,6 +164,7 @@ export default function HomePage() {
       setHeroText(languageLibrary.ja.heroText);
       setSendButtonText(languageLibrary.ja.sendButtonText);
       setStartNewChatButtonText(languageLibrary.ja.startNewChatButtonText);
+      setStartNewChatConfirmationText(languageLibrary.ja.startNewChatConfirmationText);
     } else if (languageCode === 'zh-cn') {
       setLoadingText(languageLibrary.zhCn.loadingText);
       setErrorMessage(languageLibrary.zhCn.errorMessage);
@@ -166,6 +174,7 @@ export default function HomePage() {
       setHeroText(languageLibrary.zhCn.heroText);
       setSendButtonText(languageLibrary.zhCn.sendButtonText);
       setStartNewChatButtonText(languageLibrary.zhCn.startNewChatButtonText);
+      setStartNewChatConfirmationText(languageLibrary.zhCn.startNewChatConfirmationText);
     }
 
     setlanguageCode(languageCode);
@@ -228,7 +237,7 @@ export default function HomePage() {
   return (
     <>
       <div className={`container-fluid flex flex-col min-h-screen mx-auto ${conversations.length == 0 ? '' : ''}`} style={{ backgroundImage: '/01.logo.png' }}>
-        <NavBar handleSelectedLanguage={handleSelectedLanguage} startNewChatButtonText={startNewChatButtonText}/>
+        <NavBar handleSelectedLanguage={handleSelectedLanguage} startNewChatButtonText={startNewChatButtonText} startNewChatConfirmationText={startNewChatConfirmationText} />
         {/* Navbar */}
         <div className={`flex flex-col ${conversations.length == 0 ? 'my-auto' : 'flex-grow'}`}>
           {/* Render this component if there is no conversations */}

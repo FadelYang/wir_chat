@@ -6,12 +6,11 @@ import indonesiaFlag from '/flag/flag.png';
 import japanFlag from '/flag/japan.png';
 import unitedKingdomFlag from '/flag/united-kingdom.png';
 
-export default function ({ handleSelectedLanguage, startNewChatButtonText }) {
+export default function ({ handleSelectedLanguage, startNewChatButtonText, startNewChatConfirmationText }) {
   const clearChat = (e) => {
     e.preventDefault();
-    e.preventDefault();
 
-    const confirmed = window.confirm('Apakah kamu yakin? chat yang ada sekarang akan terhapus');
+    const confirmed = window.confirm(`${startNewChatConfirmationText}`);
 
     if (confirmed) {
       localStorage.removeItem('conversations');
@@ -28,10 +27,30 @@ export default function ({ handleSelectedLanguage, startNewChatButtonText }) {
     { imageSize: '25px', flag: unitedKingdomFlag, name: 'English', code: 'en' },
   ];
 
-  const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
+  const [selectedLanguage, setSelectedLanguage] = useState(() => {
+    const savedLanguage = localStorage.getItem('languageCode');
+    return languages.find(language => language.code === savedLanguage) || languages[0];
+  });
+
+  const handleLanguageChange = (newLanguage) => {
+    if (newLanguage !== selectedLanguage) {
+      const confirmed = window.confirm(
+        `${startNewChatConfirmationText}`
+      );
+      if (confirmed) {
+        localStorage.removeItem('conversations');
+        localStorage.removeItem('sessionId');
+        localStorage.removeItem('languageCode');
+
+        setSelectedLanguage(newLanguage);
+
+        localStorage.setItem('languageCode', newLanguage.code);
+        window.location.reload();
+      }
+    }
+  };
 
   useEffect(() => {
-    localStorage.setItem('languageCode', selectedLanguage.code);
     handleSelectedLanguage();
   }, [selectedLanguage]);
 
@@ -46,7 +65,7 @@ export default function ({ handleSelectedLanguage, startNewChatButtonText }) {
           <div className='flex items-center gap-1 ms-auto'>
             {/* Language seleciton dropdowm */}
             <div className="">
-              <Listbox value={selectedLanguage} onChange={setSelectedLanguage}>
+              <Listbox value={selectedLanguage} onChange={handleLanguageChange}>
                 <div className="relative">
                   <ListboxButton className="px-4 py-2 bg-gray-200 rounded-md">
                     <div className='flex gap-1'>
@@ -100,4 +119,4 @@ export default function ({ handleSelectedLanguage, startNewChatButtonText }) {
       </div>
     </>
   );
-}
+};

@@ -15,7 +15,6 @@ export default function ({ handleSelectedLanguage, startNewChatButtonText, start
     if (confirmed) {
       localStorage.removeItem('conversations');
       localStorage.removeItem('sessionId');
-      localStorage.removeItem('languageCode');
       window.location.reload();
     }
   };
@@ -59,7 +58,7 @@ export default function ({ handleSelectedLanguage, startNewChatButtonText, start
       <div className="sticky top-0 z-10 px-5 py-5 bg-white border border-b-gray-300 md:px-20 ">
         <div className='container flex mx-auto'>
           <div className='flex items-center gap-2'>
-            <img src={wirLogo} className='w-12' />
+            <img src={wirLogo} className='w-14' />
             <div className='hidden md:block'>WIR Chat</div>
           </div>
           <div className='flex items-center gap-1 ms-auto'>

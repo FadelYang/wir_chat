@@ -5,6 +5,7 @@ import remarkGfm from 'remark-gfm';
 import remakerBreaks from 'remark-breaks';
 import wirLogo from '/logo.png';
 import { v4 as uuidv4 } from 'uuid';
+import Footer from '../components/Footer';
 
 const languageLibrary = {
   id: {
@@ -278,7 +279,7 @@ export default function HomePage() {
           {/* End of chat area */}
 
           {/* Input area */}
-          <div className={`sticky bottom-0  p-3 ${!conversations ? 'my-auto' : ''}`}>
+          <div className={`sticky bottom-0 pt-3 pb-1 ${!conversations ? 'my-auto' : ''}`}>
             <form className="flex justify-center gap-1 mx-1 sm:mx-10">
               <textarea
                 value={inputMessage}
@@ -326,6 +327,7 @@ export default function HomePage() {
             </button>
           </div>
         </div>
+        <Footer></Footer>
       </div>
     </ >
 

@@ -227,7 +227,7 @@ export default function HomePage() {
     try {
       rawBotMessage = answer.data.outputs[0].outputs[0].results.message.data.text.replace(/\n\n/gi, '&nbsp; \n\n');
     } catch (error) {
-      rawBotMessage = { errorMessage };
+      rawBotMessage = errorMessage;
     }
 
     const botMessage = { isUser: false, text: rawBotMessage };

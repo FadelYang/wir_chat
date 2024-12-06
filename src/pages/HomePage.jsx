@@ -6,6 +6,7 @@ import remakerBreaks from 'remark-breaks';
 import wirLogo from '/logo.png';
 import { v4 as uuidv4 } from 'uuid';
 import Footer from '../components/Footer';
+import WindowChatArea from '../components/organism/WindowChatArea';
 
 const languageLibrary = {
   id: {
@@ -240,6 +241,8 @@ export default function HomePage() {
       <div className={`container-fluid flex flex-col min-h-screen mx-auto ${conversations.length == 0 ? '' : ''}`} style={{ backgroundImage: '/01.logo.png' }}>
         <NavBar handleSelectedLanguage={handleSelectedLanguage} startNewChatButtonText={startNewChatButtonText} startNewChatConfirmationText={startNewChatConfirmationText} />
         {/* Navbar */}
+        <WindowChatArea conversations={conversations} languageContent={languageCode}/>
+
         <div className={`flex flex-col ${conversations.length == 0 ? 'my-auto' : 'flex-grow'}`}>
           {/* Render this component if there is no conversations */}
           <div className={`text-center ${conversations.length === 0 ? 'block px-7' : 'hidden'}`}>
@@ -327,6 +330,7 @@ export default function HomePage() {
             </button>
           </div>
         </div>
+
         <Footer></Footer>
       </div>
     </ >

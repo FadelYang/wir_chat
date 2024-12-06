@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import NavBar from '../components/NavBar';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -7,53 +7,7 @@ import wirLogo from '/logo.png';
 import { v4 as uuidv4 } from 'uuid';
 import Footer from '../components/Footer';
 import WindowChatArea from '../components/organism/WindowChatArea';
-
-const languageLibrary = {
-  id: {
-    loadingText: 'Sedang memproses, silahkan menunggu...',
-    errorMessage: 'Gagal menjawab pertanyaan, server mengalami masalah. Silahkan hubungi tim IT Governance.',
-    suggestMessage1: 'Adakah bisnis unit yang relevan untuk membuat platform eCommerce dengan pengalaman AR?',
-    suggestMessage2: 'Apa yang kamu ketahui tentang AR&Co?',
-    inputPlaceholder: 'Kirim pertanyaan...',
-    heroText: 'Ada yang bisa saya bantu?',
-    sendButtonText: 'Kirim',
-    startNewChatButtonText: 'Mulai chat baru',
-    startNewChatConfirmationText: 'Apakah kamu yakin? chat yang ada sekarang akan terhapus'
-  },
-  en: {
-    loadingText: 'Processing, please wait...',
-    errorMessage: 'Failed to answer the question. The server encountered an issue. Please contact the IT Governance team.',
-    suggestMessage1: 'Is there a relevant business unit to create an eCommerce platform with an AR experience?',
-    suggestMessage2: 'What do you know about AR&Co?',
-    inputPlaceholder: 'Send a question...',
-    heroText: 'Can I help you?',
-    sendButtonText: 'Send',
-    startNewChatButtonText: 'Start a new chat',
-    startNewChatConfirmationText: 'Are you sure? The current chat will be deleted',
-  },
-  ja: {
-    loadingText: '処理中です。お待ちください...',
-    errorMessage: '質問に答えることができませんでした。サーバーに問題が発生しました。ITガバナンスチームに連絡してください。',
-    suggestMessage1: 'AR体験を備えたeコマースプラットフォームを作成するために関連するビジネスユニットはありますか？',
-    suggestMessage2: 'AR&Coについて何を知っていますか？',
-    inputPlaceholder: '質問を送信...',
-    heroText: 'お手伝いしますか？',
-    sendButtonText: '送信',
-    startNewChatButtonText: '新しいチャットを開始',
-    startNewChatConfirmationText: 'よろしいですか？現在のチャットが削除されます',
-  },
-  zhCn: {
-    loadingText: '处理中，请稍候...',
-    errorMessage: '未能回答问题，服务器遇到问题。请联系IT治理团队。',
-    suggestMessage1: '是否有相关的业务部门可以创建带有AR体验的电子商务平台？',
-    suggestMessage2: '你对AR&Co了解多少？',
-    inputPlaceholder: '发送问题...',
-    heroText: '需要帮忙吗？',
-    sendButtonText: '发送',
-    startNewChatButtonText: '开始新聊天',
-    startNewChatConfirmationText: '你确定吗？当前的聊天将被删除',
-  },
-};
+import { LanguageContext } from '../utils/LanguageContext';
 
 export default function HomePage() {
   const [inputMessage, setInputMessage] = useState('');
@@ -65,16 +19,19 @@ export default function HomePage() {
   });
   const bottomOfChatArea = useRef(null);
   const latestBotMessage = useRef(null);
-  const [loadingText, setLoadingText] = useState(languageLibrary.id.loadingText);
-  const [errorMessage, setErrorMessage] = useState(languageLibrary.id.errorMessage);
-  const [suggestMessage1, setSuggestMessage1] = useState(languageLibrary.id.suggestMessage1);
-  const [suggestMessage2, setSuggestMessage2] = useState(languageLibrary.id.suggestMessage2);
-  const [inputPlaceholder, setInputPlaceholder] = useState(languageLibrary.id.inputPlaceholder);
-  const [heroText, setHeroText] = useState(languageLibrary.id.heroText);
-  const [languageCode, setlanguageCode] = useState(() => localStorage.getItem('languageCode') || 'id');
-  const [sendButtonText, setSendButtonText] = useState(languageLibrary.id.sendButtonText);
-  const [startNewChatButtonText, setStartNewChatButtonText] = useState(languageLibrary.id.startNewChatButtonText);
-  const [startNewChatConfirmationText, setStartNewChatConfirmationText] = useState(languageLibrary.id.startNewChatConfirmationText);
+  const {
+    loadingText,
+    errorMessage,
+    suggestMessage1,
+    suggestMessage2,
+    inputPlaceholder,
+    heroText,
+    languageCode,
+    sendButtonText,
+    startNewChatButtonText,
+    startNewChatConfirmationText,
+    changeLanguage
+  } = useContext(LanguageContext);
 
   // If sessionId or message change, update the conversations and sessionId value
   useEffect(() => {
@@ -130,58 +87,14 @@ export default function HomePage() {
   };
 
   const handleSelectedLanguage = () => {
-    // Handle selected language
-    let languageCode = localStorage.getItem('languageCode');
 
-    if (!languageCode) {
-      languageCode = 'id';
-    }
-
-    if (languageCode === 'id') {
-      setLoadingText(languageLibrary.id.loadingText);
-      setErrorMessage(languageLibrary.id.errorMessage);
-      setSuggestMessage1(languageLibrary.id.suggestMessage1);
-      setSuggestMessage2(languageLibrary.id.suggestMessage2);
-      setInputPlaceholder(languageLibrary.id.inputPlaceholder);
-      setHeroText(languageLibrary.id.heroText);
-      setSendButtonText(languageLibrary.id.sendButtonText);
-      setStartNewChatButtonText(languageLibrary.id.startNewChatButtonText);
-      setStartNewChatConfirmationText(languageLibrary.id.startNewChatConfirmationText);
-    } else if (languageCode === 'en') {
-      setLoadingText(languageLibrary.en.loadingText);
-      setErrorMessage(languageLibrary.en.errorMessage);
-      setSuggestMessage1(languageLibrary.en.suggestMessage1);
-      setSuggestMessage2(languageLibrary.en.suggestMessage2);
-      setInputPlaceholder(languageLibrary.en.inputPlaceholder);
-      setHeroText(languageLibrary.en.heroText);
-      setSendButtonText(languageLibrary.en.sendButtonText);
-      setStartNewChatButtonText(languageLibrary.en.startNewChatButtonText);
-      setStartNewChatConfirmationText(languageLibrary.en.startNewChatConfirmationText);
-    } else if (languageCode === 'ja') {
-      setLoadingText(languageLibrary.ja.loadingText);
-      setErrorMessage(languageLibrary.ja.errorMessage);
-      setSuggestMessage1(languageLibrary.ja.suggestMessage1);
-      setSuggestMessage2(languageLibrary.ja.suggestMessage2);
-      setInputPlaceholder(languageLibrary.ja.inputPlaceholder);
-      setHeroText(languageLibrary.ja.heroText);
-      setSendButtonText(languageLibrary.ja.sendButtonText);
-      setStartNewChatButtonText(languageLibrary.ja.startNewChatButtonText);
-      setStartNewChatConfirmationText(languageLibrary.ja.startNewChatConfirmationText);
-    } else if (languageCode === 'zh-cn') {
-      setLoadingText(languageLibrary.zhCn.loadingText);
-      setErrorMessage(languageLibrary.zhCn.errorMessage);
-      setSuggestMessage1(languageLibrary.zhCn.suggestMessage1);
-      setSuggestMessage2(languageLibrary.zhCn.suggestMessage2);
-      setInputPlaceholder(languageLibrary.zhCn.inputPlaceholder);
-      setHeroText(languageLibrary.zhCn.heroText);
-      setSendButtonText(languageLibrary.zhCn.sendButtonText);
-      setStartNewChatButtonText(languageLibrary.zhCn.startNewChatButtonText);
-      setStartNewChatConfirmationText(languageLibrary.zhCn.startNewChatConfirmationText);
-    }
-
-    setlanguageCode(languageCode);
-    return languageCode;
   };
+
+  useEffect(() => {
+    // Handle selected language on component mount
+    const languageCode = localStorage.getItem('languageCode') || 'id';
+    changeLanguage(languageCode);
+  }, [changeLanguage]);
 
   const sendQuestionMessage = async () => {
     const formattedInputMessage = inputMessage.replace(/\n\n/gi, '&nbsp; \n');

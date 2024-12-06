@@ -21,7 +21,7 @@ export default function ({ handleSelectedLanguage, startNewChatButtonText, start
 
   const languages = [
     { imageSize: '25px', flag: indonesiaFlag, name: 'Indonesian', code: 'id' },
-    { imageSize: '25px', flag: chinaFlag, name: 'Chinese', code: 'zh-cn' },
+    { imageSize: '25px', flag: chinaFlag, name: 'Chinese', code: 'zhCn' },
     { imageSize: '25px', flag: japanFlag, name: 'Japanese', code: 'ja' },
     { imageSize: '25px', flag: unitedKingdomFlag, name: 'English', code: 'en' },
   ];

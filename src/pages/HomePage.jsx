@@ -293,7 +293,7 @@ export default function HomePage() {
               />
               {
                 inputMessage ? (
-                  <button onClick={handleSendMessageClick} className="items-start self-end inline-block px-4 text-white bg-black hover:bg-gray-900 rounded-xl h-11 whitespace-nowrap1">
+                  <button onClick={handleSendMessageClick} className="items-start self-end inline-block px-4 text-white bg-black hover:bg-gray-900 rounded-xl h-11 whitespace-nowrap">
                     {sendButtonText}
                   </button>
                 ) : (

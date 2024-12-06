@@ -96,11 +96,11 @@ export default function HomePage() {
     inputTextArea.style.height = `${inputTextArea.scrollHeight}px`;
   }, [inputMessage]);
 
-  function handleMessageInput(e) {
+  function onMessageChange(e) {
     setInputMessage(e.target.value);
   }
 
-  function handleEnterInput(e) {
+  function onEnterKeyDown(e) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
 
@@ -118,12 +118,12 @@ export default function HomePage() {
     latestBotMessage.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleSendMessageClick = (e) => {
+  const onSendMessageClick = (e) => {
     e.preventDefault();
     sendQuestionMessage();
   };
 
-  const handleTemplateMessageButtonClick = (e) => {
+  const onTemplateMessageClick = (e) => {
     handleSelectedLanguage();
     setInputMessage(e.target.value);
   };
@@ -283,8 +283,8 @@ export default function HomePage() {
             <form className="flex justify-center gap-1 mx-1 sm:mx-10">
               <textarea
                 value={inputMessage}
-                onChange={handleMessageInput}
-                onKeyDown={handleEnterInput}
+                onChange={onMessageChange}
+                onKeyDown={onEnterKeyDown}
                 type="text"
                 required
                 id="messageInputTextarea"
@@ -293,7 +293,7 @@ export default function HomePage() {
               />
               {
                 inputMessage ? (
-                  <button onClick={handleSendMessageClick} className="items-start self-end inline-block px-4 text-white bg-black hover:bg-gray-900 rounded-xl h-11 whitespace-nowrap">
+                  <button onClick={onSendMessageClick} className="items-start self-end inline-block px-4 text-white bg-black hover:bg-gray-900 rounded-xl h-11 whitespace-nowrap">
                     {sendButtonText}
                   </button>
                 ) : (
@@ -309,7 +309,7 @@ export default function HomePage() {
           {/* Render this component if there is no conerstations */}
           <div className={`flex justify-center gap-2 flex-wrap mt-0 md:mt-3  px-7 ${conversations.length === 0 ? 'block' : 'hidden'}`}>
             <button
-              onClick={handleTemplateMessageButtonClick}
+              onClick={onTemplateMessageClick}
               className='template-question'
               value={suggestMessage1}
             >
@@ -318,7 +318,7 @@ export default function HomePage() {
                 : `${suggestMessage1.substring(0, 10)}...`}
             </button>
             <button
-              onClick={handleTemplateMessageButtonClick}
+              onClick={onTemplateMessageClick}
               className='template-question'
               value={suggestMessage2}>
               {languageCode === 'id' || languageCode === 'en'

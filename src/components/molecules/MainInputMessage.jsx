@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Textarea from '../atoms/Textarea';
 import Button from '../atoms/Button';
+import { LanguageContext } from '../../context/LanguageContext';
 
 const MainInputMessage = ({
   inputValue,
-  inputButtonText,
-  inputPlaceholder,
   onSendMessageClick,
   onMessageChange,
   onEnterKeyDown,
   conversations
 }) => {
+  const {
+    inputPlaceholder,
+    sendButtonText
+  } = useContext(LanguageContext);
+
   return (
     <div className={`sticky bottom-0 pt-3 pb-1 ${!conversations ? 'my-auto' : ''}`}>
       <form className='flex justify-center gap-1 mx- 1 sm:mx-10'>
@@ -28,13 +32,13 @@ const MainInputMessage = ({
             <Button
               className='self-end inline-block px-4 text-white bg-black item-start hover:bg-gray-900 rouned-xl h-11 whitespace-nowrap'
               onClick={onSendMessageClick}
-              children={inputButtonText}
+              children={sendButtonText}
               type='submit'
             />
           ) : (
             <Button
               className='items-start self-end inline-block px-4 text-white bg-black hover:bg-gray-900 rounded-xl h-11 whitespace-nowrap'
-              children={onSendMessageClick}
+              children={sendButtonText}
             />
           )
         }

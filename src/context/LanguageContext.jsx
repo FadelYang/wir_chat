@@ -51,8 +51,6 @@ const languageLibrary = {
 // Create the LanguageContext
 export const LanguageContext = createContext();
 
-
-
 export const LanguageProvider = ({ children }) => {
   const [languageCode, setLanguageCode] = useState(localStorage.getItem('languageCode') || 'id');
   const [loadingText, setLoadingText] = useState(languageLibrary[languageCode].loadingText);

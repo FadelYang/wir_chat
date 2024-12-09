@@ -6,7 +6,6 @@ import remakerBreaks from 'remark-breaks';
 
 const WindowChatArea = ({
   conversations,
-  languageContent
 }) => {
   return (
     <div className={`flex flex-col ${conversations.length == 0 ? 'my-auto' : 'flex-grow'}`}>

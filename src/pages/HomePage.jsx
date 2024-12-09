@@ -7,7 +7,7 @@ import wirLogo from '/logo.png';
 import { v4 as uuidv4 } from 'uuid';
 import Footer from '../components/Footer';
 import WindowChatArea from '../components/organism/WindowChatArea';
-import { LanguageContext } from '../utils/LanguageContext';
+import { LanguageContext } from '../context/LanguageContext';
 
 export default function HomePage() {
   const [inputMessage, setInputMessage] = useState('');

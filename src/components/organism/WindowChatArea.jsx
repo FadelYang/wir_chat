@@ -1,4 +1,4 @@
-import react, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import MainInputMessage from '../molecules/MainInputMessage';
 import MainPageLogo from '../molecules/MainPageLogo';
 import ReactMarkdown from 'react-markdown';

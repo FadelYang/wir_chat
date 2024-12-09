@@ -1,12 +1,18 @@
 import wirLogo from '/logo.png';
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react';
-import { useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import chinaFlag from '/flag/china.png';
 import indonesiaFlag from '/flag/flag.png';
 import japanFlag from '/flag/japan.png';
 import unitedKingdomFlag from '/flag/united-kingdom.png';
+import { LanguageContext } from '../../context/LanguageContext';
 
-export default function ({ handleSelectedLanguage, startNewChatButtonText, startNewChatConfirmationText }) {
+export default function () {
+  const {
+    startNewChatButtonText,
+    startNewChatConfirmationText
+  } = useContext(LanguageContext);
+
   const clearChat = (e) => {
     e.preventDefault();
 
@@ -48,10 +54,6 @@ export default function ({ handleSelectedLanguage, startNewChatButtonText, start
       }
     }
   };
-
-  useEffect(() => {
-    handleSelectedLanguage();
-  }, [selectedLanguage]);
 
   return (
     <>

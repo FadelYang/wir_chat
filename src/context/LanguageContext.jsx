@@ -70,10 +70,6 @@ export const LanguageProvider = ({ children }) => {
 
     const languageSettings = languageLibrary[languageCode] || languageLibrary['id'];
 
-    console.log({
-      languageLibrary: languageLibrary[languageCode]
-    });
-
     setLoadingText(languageSettings.loadingText);
     setErrorMessage(languageSettings.errorMessage);
     setSuggestMessage1(languageSettings.suggestMessage1);

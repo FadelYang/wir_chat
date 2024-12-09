@@ -5,10 +5,11 @@ const Button = ({
   style,
   onClick,
   className,
-  type
+  type,
+  value
 }) => {
   return (
-    <button style={style} onClick={onClick} className={className} type={type}>
+    <button style={style} onClick={onClick} className={className} type={type} value={value}>
       {children}
     </button>
   );

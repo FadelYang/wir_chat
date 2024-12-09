@@ -23,14 +23,14 @@ const MainInputMessage = ({
           value={inputValue}
           placeholder={inputPlaceholder}
           type='text'
-          id='messageInputTextarea'
+          id='messageInputTextareaComponent'
           onChange={onMessageChange}
           onKeyDown={onEnterKeyDown}
         />
         {
           inputValue ? (
             <Button
-              className='self-end inline-block px-4 text-white bg-black item-start hover:bg-gray-900 rouned-xl h-11 whitespace-nowrap'
+              className='self-end inline-block px-4 text-white bg-black item-start hover:bg-gray-900 rounded-xl h-11 whitespace-nowrap'
               onClick={onSendMessageClick}
               children={sendButtonText}
               type='submit'

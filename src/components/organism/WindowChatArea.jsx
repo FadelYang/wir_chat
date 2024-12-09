@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import react, { useContext, useEffect, useRef, useState } from 'react';
 import MainInputMessage from '../molecules/MainInputMessage';
 import MainPageLogo from '../molecules/MainPageLogo';
 import ReactMarkdown from 'react-markdown';
@@ -8,7 +8,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { LanguageContext } from '../../context/LanguageContext';
 import SuggestedMessage from '../molecules/SuggestedMessage';
 
-const WindowChatArea = ({ conversations }) => {
+const WindowChatArea = ({
+  conversations,
+  setConversations
+}) => {
   const [isRequestPending, setIsRequestPending] = useState(false);
   const [sessionId, setSessionId] = useState(() => localStorage.getItem('sessionId') || '');
   const [inputMessage, setInputMessage] = useState('');

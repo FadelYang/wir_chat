@@ -24,7 +24,7 @@ export default function HomePage() {
       <div className={`container-fluid flex flex-col min-h-screen mx-auto ${conversations.length == 0 ? '' : ''}`} style={{ backgroundImage: '/01.logo.png' }}>
         <NavBar handleSelectedLanguage={handleSelectedLanguage} startNewChatButtonText={startNewChatButtonText} startNewChatConfirmationText={startNewChatConfirmationText} />
         {/* Navbar */}
-        <WindowChatArea conversations={conversations} languageContent={languageCode}/>
+        <WindowChatArea languageContent={languageCode} conversations={conversations} setConversations={setConversations}/>
         <Footer></Footer>
       </div>
     </ >

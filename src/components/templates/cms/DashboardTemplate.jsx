@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import MainFullLogo from '../../atoms/MainFullLogo';
+import React, {useState, useEffect} from "react";
+import {Link} from "react-router-dom";
+import MainFullLogo from "../../atoms/MainFullLogo";
 
 const DashboardTemplate = ({children}) => {
   const [isProfilDropdownOpen, setIsProfilDropdownOpen] = useState(false);
@@ -16,8 +17,8 @@ const DashboardTemplate = ({children}) => {
     };
 
     handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const toggleDropdown = () => {
@@ -39,7 +40,7 @@ const DashboardTemplate = ({children}) => {
   return (
     <div className="relative flex min-h-screen bg-gray-100">
       {isMobile && isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-20 bg-black/50"
           onClick={toggleSidebar}
         />
@@ -49,25 +50,36 @@ const DashboardTemplate = ({children}) => {
       <div
         className={`
           w-64 bg-white shadow-md
-          ${isMobile 
-            ? `fixed inset-y-0 left-0 z-30 transform transition-transform duration-300 ease-in-out ${
-                isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-              }`
-            : `relative ${!isSidebarOpen ? 'hidden' : ''}`
+          ${
+            isMobile
+              ? `fixed inset-y-0 left-0 z-30 transform transition-transform duration-300 ease-in-out ${
+                  isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+                }`
+              : `relative ${!isSidebarOpen ? "hidden" : ""}`
           }
         `}
       >
         <div className="p-4 border-b">
           <div className="flex items-center justify-center h-16 md:h-24">
-          <MainFullLogo className='h-20'/>
+            <MainFullLogo className="h-20" />
           </div>
         </div>
+        <ul className="mt-2 mb-0 space-y-1 ps-0">
+          <li className="w-full">
+            <Link
+              to={`/dashboard`}
+              className="block px-8 py-2 text-gray-700 transition-colors rounded hover:bg-gray-200"
+            >
+              Dashboard
+            </Link>
+          </li>
+        </ul>
         <nav className="p-4">
           <button
             className="text-white bg-[#333A48] w-full py-2 rounded flex justify-between px-5 items-center"
             onClick={() => handleShowSidebarMenu("dashboardMenu")}
           >
-            <span>Dashboard</span>
+            <span>Main Menu</span>
             <i
               className={`fa-solid fa-chevron-up transition-transform duration-200 ${
                 openSidebarMenu === "dashboardMenu" ? "rotate-180" : "rotate-0"
@@ -77,19 +89,35 @@ const DashboardTemplate = ({children}) => {
           <div>
             <ul
               className={`mt-2 ps-0 space-y-1 transition-all duration-200 list-none ${
-                openSidebarMenu === "dashboardMenu" ? "max-h-48" : "max-h-0 overflow-hidden"
+                openSidebarMenu === "dashboardMenu"
+                  ? "max-h-48"
+                  : "max-h-0 overflow-hidden"
               }`}
             >
-              {["Languages", "Collections", "DB Locations"].map((item) => (
-                <li key={item} className='w-full'>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-gray-700 transition-colors rounded hover:bg-gray-200"
-                  >
-                    {item}
-                  </a>
-                </li>
-              ))}
+              <li className="w-full">
+                <Link
+                  to={`/dashboard/languages`}
+                  className="block px-4 py-2 text-gray-700 transition-colors rounded hover:bg-gray-200"
+                >
+                  Languages
+                </Link>
+              </li>
+              <li className="w-full">
+                <Link
+                  to={`/dashboard/collections`}
+                  className="block px-4 py-2 text-gray-700 transition-colors rounded hover:bg-gray-200"
+                >
+                  Colletictions
+                </Link>
+              </li>
+              <li className="w-full">
+                <Link
+                  to={`/dashboard/databases`}
+                  className="block px-4 py-2 text-gray-700 transition-colors rounded hover:bg-gray-200"
+                >
+                  DB Locations
+                </Link>
+              </li>
             </ul>
           </div>
         </nav>
@@ -124,12 +152,12 @@ const DashboardTemplate = ({children}) => {
                 <ul className="py-1 list-none ps-0">
                   {["Profile", "Settings", "Logout"].map((item) => (
                     <li key={item}>
-                      <a
-                        href="#"
+                      <Link
+                        to={item}
                         className="block px-4 py-2 text-gray-700 transition-colors hover:bg-gray-200"
                       >
                         {item}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -139,9 +167,7 @@ const DashboardTemplate = ({children}) => {
         </header>
 
         {/* Main Content Area */}
-        <main className="p-4 md:p-6">
-          {children}
-        </main>
+        <main className="p-4 md:p-6">{children}</main>
       </div>
     </div>
   );

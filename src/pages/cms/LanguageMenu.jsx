@@ -1,9 +1,22 @@
 import React from "react";
-import DashboardTemplate from '../../components/templates/cms/DashboardTemplate';
+import DashboardTemplate from "../../components/templates/cms/DashboardTemplate";
+import HeaderMenu from "../../components/organism/cms/HeaderMenu";
 
 const LanguageMenu = () => {
+  const breadcrumbPath = [
+    {name: "Dashboard", path: "/dashboard"},
+    {name: "Languages", path: "/dashboard/languages"},
+  ];
+
   return (
-    <DashboardTemplate>LanguageMenu</DashboardTemplate>
+    <DashboardTemplate>
+      <HeaderMenu name={`Languages`} breadcrumbPath={breadcrumbPath} />
+      <div className="mt-14">
+        <div className='flex justify-end'>
+          <button className='bg-[#0F172A] text-white py-2 px-4 text-sm rounded'>Add new laguage</button>
+        </div>
+      </div>
+    </DashboardTemplate>
   );
 };
 

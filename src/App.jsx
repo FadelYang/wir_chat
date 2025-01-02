@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import HomePage from './pages/HomePage';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/cms/Dashboard';
 
 function App() {
   return (

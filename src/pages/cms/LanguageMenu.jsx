@@ -18,7 +18,7 @@ const LanguageMenu = () => {
             Add new laguage
           </button>
         </div>
-        <div>
+        <div className="mt-5">
           <LanguageTable />
         </div>
       </div>

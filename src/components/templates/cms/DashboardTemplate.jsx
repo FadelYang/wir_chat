@@ -113,7 +113,7 @@ const DashboardTemplate = ({children}) => {
                   to={`/dashboard/collections`}
                   className={`block px-4 py-2 ${selectedRoute === '/dashboard/collections' ? 'text-black' : 'text-gray-700'} transition-colors rounded hover:bg-gray-200`}
                 >
-                  Colletictions
+                  Collections
                 </Link>
               </li>
               <li className="w-full">
@@ -130,7 +130,7 @@ const DashboardTemplate = ({children}) => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1">
+      <div className="flex flex-col flex-1 min-w-0">
         {/* Header */}
         <header className="sticky top-0 z-10 flex items-center justify-between px-4 py-4 bg-white shadow-md md:px-6">
           <div>
@@ -173,7 +173,7 @@ const DashboardTemplate = ({children}) => {
         </header>
 
         {/* Main Content Area */}
-        <main className="p-4 md:p-6">{children}</main>
+        <main className="flex-1 min-w-0 p-4 bg-gray-50 md:p-6">{children}</main>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import {
   useReactTable,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
 } from "@tanstack/react-table";
 
 const languageDummyData = [
@@ -33,15 +34,14 @@ const languageDummyData = [
 ];
 
 const LanguageTable = () => {
-  // const {columns, data} = props
   const [data, setData] = useState(languageDummyData);
-  const languageTableDefinition = [
+  const columns = [
     {
       header: "id",
       accessorKey: "id",
     },
     {
-      header: "Languange",
+      header: "Language",
       accessorKey: "language",
     },
     {
@@ -52,35 +52,29 @@ const LanguageTable = () => {
       header: "Action",
       accessorKey: "action",
     },
-    {
-      header: "Action",
-      accessorKey: "action",
-    },
-    {
-      header: "Action",
-      accessorKey: "action",
-    },
   ];
-  const languageTableInstance = useReactTable({
+
+  const tableInstance = useReactTable({
     data,
-    columns: languageTableDefinition,
+    columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
     <>
-      <div className="flex justify-center w-full p-5 overflow-x-auto">
-        <div className="">
-          <table className="min-w-full text-sm font-light text-left table-auto text-surface">
-            <thead className="font-medium border-b border-neutral-200">
-              {languageTableInstance.getHeaderGroups().map((headerGroup) => (
+      <div className="w-full overflow-hidden border border-gray-200 rounded-lg shadow-sm">
+        <div className="w-full overflow-x-auto">
+          <table className="w-full divide-y divide-gray-200">
+            <thead className="bg-white">
+              {tableInstance.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
                     <th
                       colSpan={header.colSpan}
                       key={header.id}
                       scope="col"
-                      className="px-6 py-4"
+                      className="px-6 py-3 text-sm font-normal text-left text-gray-500 text-la whitespace-nowrap"
                     >
                       {header.isPlaceholder
                         ? null
@@ -93,13 +87,13 @@ const LanguageTable = () => {
                 </tr>
               ))}
             </thead>
-            <tbody>
-              {languageTableInstance.getRowModel().rows.map((row) => (
-                <tr key={row.id} className="border-b border-neutral-200">
+            <tbody className="bg-white divide-y divide-gray-200">
+              {tableInstance.getRowModel().rows.map((row) => (
+                <tr key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
-                      className="h-10 px-6 py-4 whitespace-nowrap"
+                      className="px-6 py-4 text-sm text-gray-700 whitespace-nowrap"
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -111,6 +105,32 @@ const LanguageTable = () => {
               ))}
             </tbody>
           </table>
+        </div>
+      </div>
+      <div className="flex gap-3 mt-2 text-[#3C50E0]">
+        <div>
+          <button
+            onClick={() => {
+              tableInstance.previousPage();
+            }}
+            disabled={!tableInstance.getCanPreviousPage()}
+            className={
+              !tableInstance.getCanPreviousPage() ? "text-gray-500" : ""
+            }
+          >
+            Previous Page
+          </button>
+        </div>
+        <div>
+          <button
+            onClick={() => {
+              tableInstance.nextPage();
+            }}
+            disabled={!tableInstance.getCanNextPage()}
+            className={!tableInstance.getCanNextPage() ? "text-gray-500" : ""}
+          >
+            Next Page
+          </button>
         </div>
       </div>
     </>

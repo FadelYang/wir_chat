@@ -44,7 +44,7 @@ const DashboardTemplate = ({children}) => {
   };
 
   return (
-    <div className="relative flex min-h-screen bg-gray-100">
+    <div className="relative flex min-h-screen">
       {isMobile && isSidebarOpen && (
         <div
           className="fixed inset-0 z-20 bg-black/50"

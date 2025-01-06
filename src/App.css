@@ -3,6 +3,13 @@
 @tailwind components;
 @tailwind utilities;
 
+table {
+  border-collapse: collapse;
+}
+td,
+th {
+  padding: 0; /* Remove default padding */
+}
 
 ol {
   list-style: decimal;
@@ -18,14 +25,14 @@ ul {
   margin-bottom: 1rem;
 }
 
-p>br {
+p > br {
   display: block;
   content: " ";
   margin-top: 1rem;
 }
 
 .template-question {
-  @apply px-2 py-1 text-xs sm:text-base text-center border border-black rounded-full bg-white
+  @apply px-2 py-1 text-xs sm:text-base text-center border border-black rounded-full bg-white;
 }
 
 /* div {

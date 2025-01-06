@@ -6,54 +6,8 @@ import {
   getPaginationRowModel,
 } from "@tanstack/react-table";
 
-const languageDummyData = [
-  {
-    id: "1",
-    language: "Indonesia",
-    selectedCollection: "db_indonesia_142_test",
-    action: "dummy action",
-  },
-  {
-    id: "2",
-    language: "Japan",
-    selectedCollection: "db_japan_142_test",
-    action: "dummy action",
-  },
-  {
-    id: "3",
-    language: "China",
-    selectedCollection: "db_china_142_test",
-    action: "dummy action",
-  },
-  {
-    id: "4",
-    language: "English",
-    selectedCollection: "db_english_142_test",
-    action: "dummy action",
-  },
-];
-
-const LanguageTable = () => {
-  const [data, setData] = useState(languageDummyData);
-  const columns = [
-    {
-      header: "id",
-      accessorKey: "id",
-    },
-    {
-      header: "Language",
-      accessorKey: "language",
-    },
-    {
-      header: "Selected Collection",
-      accessorKey: "selectedCollection",
-    },
-    {
-      header: "Action",
-      accessorKey: "action",
-    },
-  ];
-
+const LanguageTable = (props) => {
+  const {data, columns} = props
   const tableInstance = useReactTable({
     data,
     columns,
@@ -107,7 +61,7 @@ const LanguageTable = () => {
           </table>
         </div>
       </div>
-      <div className="flex gap-3 mt-2 text-[#3C50E0]">
+      <div className="flex gap-3 mt-2 text-[#3C50E0] text-sm">
         <div>
           <button
             onClick={() => {

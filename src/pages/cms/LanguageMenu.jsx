@@ -1,7 +1,7 @@
 import React from "react";
 import DashboardTemplate from "../../components/templates/cms/DashboardTemplate";
 import HeaderMenu from "../../components/organism/cms/HeaderMenu";
-import LanguageTable from "../../components/organism/cms/datatables/languagesDatatable/LanguageTable";
+import LanguageTable from "../../components/organism/cms/datatables/LanguageTable";
 
 const LanguageMenu = () => {
   const breadcrumbPath = [

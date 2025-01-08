@@ -10,9 +10,32 @@ const CollectionMenu = () => {
     {name: "Collections", path: "/dashboard/collections"},
   ];
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    collectionFile: "",
+    collectionName: "",
+    databaseLocation: "",
+  });
+
+  const handleFormChange = (event) => {
+    const {name, value} = event.target;
+    setFormData((prevFormData) => ({...prevFormData, [name]: value}));
+  };
+
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    console.log({formData});
+  };
 
   const modalToggle = () => {
     setIsModalOpen(!isModalOpen);
+  };
+
+  const addNewCollections = () => {
+    const isConfirm = confirm(
+      "are you sure, please check the input again  before submit"
+    );
+
+    if (!isConfirm) return;
   };
 
   return (
@@ -41,52 +64,77 @@ const CollectionMenu = () => {
                 </button>
               </div>
             </div>
-            <form className="">
-            <div className="mb-4">
+            <form className="" onSubmit={handleFormSubmit}>
+              <div className="mb-4">
                 <label
                   className="block mb-2 text-sm font-bold text-gray-700"
-                  for="collectionFile"
+                  htmlFor="collectionFile"
                 >
-                  Collection Name
+                  Collection File
                 </label>
                 <input
                   className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                   id="collectionFile"
+                  name="collectionFile"
+                  value={formData.collectionFile}
+                  onChange={handleFormChange}
                   type="file"
+                  required
                 />
               </div>
               <div className="mb-4">
                 <label
                   className="block mb-2 text-sm font-bold text-gray-700"
-                  for="languageName"
+                  htmlFor="collectionName"
                 >
                   Collection Name
                 </label>
                 <input
                   className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                   id="collectionName"
+                  name="collectionName"
+                  value={formData.collectionName}
+                  onChange={handleFormChange}
                   type="text"
                   placeholder="Collection name"
+                  required
                 />
               </div>
               <div className="mb-6">
                 <label
                   className="block mb-2 text-sm font-bold text-gray-700"
-                  for="selectedCollections"
+                  htmlFor="databaseLocation"
                 >
                   Store DB location
                 </label>
-                <input
-                  className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                  id="selectedCollections"
-                  type="text"
-                  placeholder="Selected collections"
-                />
+                <div className="relative">
+                  <select
+                    className="block w-full px-4 py-2 pr-8 leading-tight text-gray-700 bg-white border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                    id="databaseLocation"
+                    name="databaseLocation"
+                    value={formData.databaseLocation}
+                    onChange={handleFormChange}
+                  >
+                    <option value="indonesia">Indonesia</option>
+                    <option value="english">English</option>
+                    <option value="china">China</option>
+                    <option value="japan">Japan</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
+                    <svg
+                      className="w-4 h-4 fill-current"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                    </svg>
+                  </div>
+                </div>
               </div>
               <div className="flex items-center justify-end">
                 <button
                   className="px-4 py-2 text-sm font-bold text-white bg-gray-900 rounded hover:bg-gray-950 focus:outline-none focus:shadow-outline"
-                  type="button"
+                  type="submit"
                 >
                   Add collection
                 </button>

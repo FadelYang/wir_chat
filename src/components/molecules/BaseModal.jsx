@@ -1,7 +1,7 @@
 import React from "react";
 
 const BaseModal = (props) => {
-  const {children} = props;
+  const {children, isModalOpen, setIsModalOpen, modalToggle} = props;
   return (
     <>
       <div className="fixed inset-0 z-20 bg-black opacity-50"></div>

@@ -3,8 +3,8 @@ import BaseTable from "./BaseTable";
 
 const CollectionTable = () => {
   const [collections, setCollections] = useState([]);
-  const [columns, setColumns] = useState([]);
   const [formattedData, setFormattedData] = useState([]);
+  const [isLoading, setIsloading] = useState(true);
 
   const getCollectionByLanguage = async (language) => {
     try {
@@ -46,6 +46,7 @@ const CollectionTable = () => {
 
   const getAllCollections = async () => {
     const allCollections = [];
+    let index = 1;
 
     for (let language of existingLanguages) {
       const rawCollections = await getCollectionByLanguage(language);
@@ -53,25 +54,57 @@ const CollectionTable = () => {
         const cleanCollections = getCollectionItemFromResponse(rawCollections);
         cleanCollections.forEach((collection) => {
           allCollections.push({
+            id: index,
             collectionName: collection,
             databaseLocation: language,
+            action: "dummy action",
           });
+          index++;
         });
       }
     }
 
     setCollections(allCollections);
+    sessionStorage.setItem("collections", JSON.stringify(allCollections));
+    setIsloading(false);
   };
 
+  const collectionTableDefinition = [
+    {
+      header: "id",
+      accessorKey: "id",
+    },
+    {
+      header: "Collection Name",
+      accessorKey: "collectionName",
+    },
+    {
+      header: "Database Location",
+      accessorKey: "databaseLocation",
+    },
+    {
+      header: "Action",
+      accessorKey: "action",
+    },
+  ];
+
   useEffect(() => {
-    getAllCollections();
+      getAllCollections();
   }, []);
 
   if (collections.length > 0) {
     console.log({collections});
   }
 
-  return <BaseTable columns={columns} data={formattedData} />;
+  return (
+    <>
+      {!isLoading ? (
+        <BaseTable columns={collectionTableDefinition} data={collections} />
+      ) : (
+        <div className="text-center">Loading collections data...</div>
+      )}
+    </>
+  );
 };
 
 export default CollectionTable;

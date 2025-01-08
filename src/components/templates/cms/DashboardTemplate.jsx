@@ -7,13 +7,15 @@ const DashboardTemplate = ({children}) => {
   const [openSidebarMenu, setOpenSidebarMenu] = useState("dashboardMenu");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
-  const [selectedRoute, setSelectedRoute] = useState('');
+  const [selectedRoute, setSelectedRoute] = useState("");
 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
       if (window.innerWidth < 768) {
         setIsSidebarOpen(false);
+      } else {
+        setIsSidebarOpen(true);
       }
     };
 
@@ -24,7 +26,7 @@ const DashboardTemplate = ({children}) => {
 
   useEffect(() => {
     const pathName = window.location.pathname;
-    setSelectedRoute(pathName)
+    setSelectedRoute(pathName);
   }, []);
 
   const toggleDropdown = () => {
@@ -74,7 +76,9 @@ const DashboardTemplate = ({children}) => {
           <li className="w-full">
             <Link
               to={`/dashboard`}
-              className={`block px-8 py-2 ${selectedRoute === '/dashboard' ? 'text-black' : 'text-gray-700'} transition-colors rounded hover:bg-gray-200`}
+              className={`block px-8 py-2 ${
+                selectedRoute === "/dashboard" ? "text-black" : "text-gray-700"
+              } transition-colors rounded hover:bg-gray-200`}
             >
               Dashboard
             </Link>
@@ -103,7 +107,11 @@ const DashboardTemplate = ({children}) => {
               <li className="w-full">
                 <Link
                   to={`/dashboard/languages`}
-                  className={`block px-4 py-2 ${selectedRoute === '/dashboard/languages' ? 'text-black' : 'text-gray-700'} transition-colors rounded hover:bg-gray-200`}
+                  className={`block px-4 py-2 ${
+                    selectedRoute === "/dashboard/languages"
+                      ? "text-black"
+                      : "text-gray-700"
+                  } transition-colors rounded hover:bg-gray-200`}
                 >
                   Languages
                 </Link>
@@ -111,7 +119,11 @@ const DashboardTemplate = ({children}) => {
               <li className="w-full">
                 <Link
                   to={`/dashboard/collections`}
-                  className={`block px-4 py-2 ${selectedRoute === '/dashboard/collections' ? 'text-black' : 'text-gray-700'} transition-colors rounded hover:bg-gray-200`}
+                  className={`block px-4 py-2 ${
+                    selectedRoute === "/dashboard/collections"
+                      ? "text-black"
+                      : "text-gray-700"
+                  } transition-colors rounded hover:bg-gray-200`}
                 >
                   Collections
                 </Link>
@@ -119,7 +131,11 @@ const DashboardTemplate = ({children}) => {
               <li className="w-full">
                 <Link
                   to={`/dashboard/databases`}
-                  className={`block px-4 py-2 ${selectedRoute === '/dashboard/databases' ? 'text-black' : 'text-gray-700'} transition-colors rounded hover:bg-gray-200`}
+                  className={`block px-4 py-2 ${
+                    selectedRoute === "/dashboard/databases"
+                      ? "text-black"
+                      : "text-gray-700"
+                  } transition-colors rounded hover:bg-gray-200`}
                 >
                   DB Locations
                 </Link>

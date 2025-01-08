@@ -7,7 +7,7 @@ import {
 } from "@tanstack/react-table";
 
 const LanguageTable = (props) => {
-  const {data, columns} = props
+  const {data, columns} = props;
   const tableInstance = useReactTable({
     data,
     columns,

@@ -1,6 +1,7 @@
 import React from "react";
 import DashboardTemplate from "../../components/templates/cms/DashboardTemplate";
 import HeaderMenu from "../../components/organism/cms/HeaderMenu";
+import CollectionTable from "../../components/organism/cms/datatables/CollectionTable";
 
 const CollectionMenu = () => {
   const breadcrumbPath = [
@@ -16,6 +17,9 @@ const CollectionMenu = () => {
           <button className="bg-[#0F172A] text-white py-2 px-4 text-sm rounded">
             Add new collections
           </button>
+        </div>
+        <div className="mt-5">
+          <CollectionTable />
         </div>
       </div>
     </DashboardTemplate>

@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import DashboardTemplate from "../../components/templates/cms/DashboardTemplate";
 import HeaderMenu from "../../components/organism/cms/HeaderMenu";
 import CollectionTable from "../../components/organism/cms/datatables/CollectionTable";
@@ -17,25 +17,52 @@ const CollectionMenu = () => {
   });
 
   const handleFormChange = (event) => {
-    const {name, value} = event.target;
-    setFormData((prevFormData) => ({...prevFormData, [name]: value}));
+    const {name, value, type, files} = event.target;
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: type === "file" ? files[0] : value,
+    }));
   };
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    console.log({formData});
+    const isConfirm = confirm(
+      "are you sure, please check the input again  before submit"
+    );
+    if (!isConfirm) return;
+
+    const postCollectionFormData = new FormData();
+
+    postCollectionFormData.append("file", formData.collectionFile);
+    postCollectionFormData.append("collection_name", formData.collectionName);
+    postCollectionFormData.append(
+      "store_db_location",
+      formData.databaseLocation
+    );
+    postCollectionFormData.append("components", "File-h8zKv");
+
+    fetch("http://172.20.12.200:5000/upload-collection", {
+      method: "POST",
+      body: postCollectionFormData,
+    }).then(
+      (res) => {
+        if (res.ok) {
+          alert("Success upload new collection!");
+        } else {
+          console.log(res);
+          alert(`something error ${res}`);
+        }
+      },
+      (e) => {
+        console.log(e);
+        alert(`something error ${e}`);
+      }
+    );
   };
 
   const modalToggle = () => {
     setIsModalOpen(!isModalOpen);
-  };
-
-  const addNewCollections = () => {
-    const isConfirm = confirm(
-      "are you sure, please check the input again  before submit"
-    );
-
-    if (!isConfirm) return;
   };
 
   return (
@@ -64,7 +91,12 @@ const CollectionMenu = () => {
                 </button>
               </div>
             </div>
-            <form className="" onSubmit={handleFormSubmit}>
+            <form
+              className=""
+              onSubmit={handleFormSubmit}
+              encType={"multipart/form-data"}
+              action="#"
+            >
               <div className="mb-4">
                 <label
                   className="block mb-2 text-sm font-bold text-gray-700"

@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import {useState} from "react";
 import DashboardTemplate from "../../components/templates/cms/DashboardTemplate";
 import HeaderMenu from "../../components/organism/cms/HeaderMenu";
 import CollectionTable from "../../components/organism/cms/datatables/CollectionTable";
@@ -9,9 +9,11 @@ const CollectionMenu = () => {
     {name: "Dashboard", path: "/dashboard"},
     {name: "Collections", path: "/dashboard/collections"},
   ];
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    collectionFile: "",
+    collectionFile: null,
     collectionName: "",
     databaseLocation: "",
   });
@@ -25,78 +27,89 @@ const CollectionMenu = () => {
     }));
   };
 
-  const handleFormSubmit = (event) => {
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
-    const isConfirm = confirm(
-      "are you sure, please check the input again  before submit"
+
+    if (!formData.collectionFile || !formData.collectionName) {
+      alert("Please fill in all required fields");
+      return;
+    }
+
+    const isConfirm = window.confirm(
+      "Are you sure? Please check the input again before submitting"
     );
+
     if (!isConfirm) return;
 
-    const postCollectionFormData = new FormData();
+    try {
+      setIsSubmitting(true);
 
-    postCollectionFormData.append("file", formData.collectionFile);
-    postCollectionFormData.append("collection_name", formData.collectionName);
-    postCollectionFormData.append(
-      "store_db_location",
-      formData.databaseLocation
-    );
-    postCollectionFormData.append("components", "File-h8zKv");
+      const postCollectionFormData = new FormData();
+      postCollectionFormData.append("file", formData.collectionFile);
+      postCollectionFormData.append("collection_name", formData.collectionName);
+      postCollectionFormData.append(
+        "store_db_location",
+        formData.databaseLocation
+      );
+      postCollectionFormData.append("components", "File-h8zKv");
 
-    fetch("http://172.20.12.200:5000/upload-collection", {
-      method: "POST",
-      body: postCollectionFormData,
-    }).then(
-      (res) => {
-        if (res.ok) {
-          alert("Success upload new collection!");
-        } else {
-          console.log(res);
-          alert(`something error ${res}`);
+      const response = await fetch(
+        "http://172.20.12.200:5000/upload-collection",
+        {
+          method: "POST",
+          body: postCollectionFormData,
         }
-      },
-      (e) => {
-        console.log(e);
-        alert(`something error ${e}`);
-      }
-    );
-  };
+      );
 
-  const modalToggle = () => {
-    setIsModalOpen(!isModalOpen);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      alert("Success: Collection uploaded successfully!");
+
+      setFormData({
+        collectionFile: null,
+        collectionName: "",
+        databaseLocation: "",
+      });
+      setIsModalOpen(false);
+
+    } catch (error) {
+      console.error("Error uploading collection:", error);
+      alert(`Error: ${error.message || "Failed to upload collection"}`);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <DashboardTemplate>
-      <HeaderMenu name={`Collections`} breadcrumbPath={breadcrumbPath} />
+      <HeaderMenu name="Collections" breadcrumbPath={breadcrumbPath} />
       <div className="mt-14">
         <div className="flex justify-end">
           <button
             className="px-4 py-2 text-sm text-white bg-gray-900 rounded hover:bg-gray-950"
-            onClick={() => modalToggle()}
+            onClick={() => setIsModalOpen(true)}
           >
             Add new collections
           </button>
         </div>
-        <div className="mt-5">{/* <CollectionTable /> */}</div>
+        <div className="mt-5">
+          <CollectionTable />
+        </div>
       </div>
 
       {isModalOpen && (
         <BaseModal>
           <div>
             <div className="flex justify-between mb-5 font-bold text-md">
-              <h1 className="">Add new collection</h1>
-              <div>
-                <button onClick={() => modalToggle()}>
-                  <i className="fa-solid fa-xmark"></i>
-                </button>
-              </div>
+              <h1>Add new collection</h1>
+              <button onClick={() => setIsModalOpen(false)}>
+                <i className="fa-solid fa-xmark"></i>
+              </button>
             </div>
-            <form
-              className=""
-              onSubmit={handleFormSubmit}
-              encType={"multipart/form-data"}
-              action="#"
-            >
+            <form onSubmit={handleFormSubmit} encType="multipart/form-data">
               <div className="mb-4">
                 <label
                   className="block mb-2 text-sm font-bold text-gray-700"
@@ -108,9 +121,8 @@ const CollectionMenu = () => {
                   className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                   id="collectionFile"
                   name="collectionFile"
-                  value={formData.collectionFile}
-                  onChange={handleFormChange}
                   type="file"
+                  onChange={handleFormChange}
                   required
                 />
               </div>
@@ -165,10 +177,11 @@ const CollectionMenu = () => {
               </div>
               <div className="flex items-center justify-end">
                 <button
-                  className="px-4 py-2 text-sm font-bold text-white bg-gray-900 rounded hover:bg-gray-950 focus:outline-none focus:shadow-outline"
+                  className="px-4 py-2 text-sm font-bold text-white bg-gray-900 rounded hover:bg-gray-950 focus:outline-none focus:shadow-outline disabled:bg-gray-500"
                   type="submit"
+                  disabled={isSubmitting}
                 >
-                  Add collection
+                  {isSubmitting ? "Adding..." : "Add collection"}
                 </button>
               </div>
             </form>

@@ -24,3 +24,5 @@ Currently, two official plugins are available:
 - User can restart their session to start a new chat
 - Add Negative prompt
 - Add Session ID
+## Version 3.0.0
+- Add Languange options (English, Japan, Chineese)

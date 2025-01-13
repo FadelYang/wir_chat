@@ -92,10 +92,6 @@ const CollectionTable = () => {
       getAllCollections();
   }, []);
 
-  if (collections.length > 0) {
-    console.log({collections});
-  }
-
   return (
     <>
       {!isLoading ? (

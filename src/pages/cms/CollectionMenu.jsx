@@ -15,7 +15,7 @@ const CollectionMenu = () => {
   const [formData, setFormData] = useState({
     collectionFile: null,
     collectionName: "",
-    databaseLocation: "",
+    databaseLocation: "indonesia",
   });
 
   const handleFormChange = (event) => {

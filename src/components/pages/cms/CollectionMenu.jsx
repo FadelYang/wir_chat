@@ -1,4 +1,4 @@
-import {useState} from "react";
+import { useState } from "react";
 import DashboardTemplate from "../../templates/cms/DashboardTemplate";
 import HeaderMenu from "../../organism/cms/HeaderMenu";
 import CollectionTable from "../../organism/cms/datatables/CollectionTable";
@@ -6,8 +6,8 @@ import BaseModal from "../../molecules/BaseModal";
 
 const CollectionMenu = () => {
   const breadcrumbPath = [
-    {name: "Dashboard", path: "/dashboard"},
-    {name: "Collections", path: "/dashboard/collections"},
+    { name: "Dashboard", path: "/dashboard" },
+    { name: "Collections", path: "/dashboard/collections" },
   ];
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,7 +19,7 @@ const CollectionMenu = () => {
   });
 
   const handleFormChange = (event) => {
-    const {name, value, type, files} = event.target;
+    const { name, value, type, files } = event.target;
 
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -74,7 +74,7 @@ const CollectionMenu = () => {
         databaseLocation: "",
       });
       setIsModalOpen(false);
-
+      window.location.reload();
     } catch (error) {
       console.error("Error uploading collection:", error);
       alert(`Error: ${error.message || "Failed to upload collection"}`);
@@ -131,7 +131,7 @@ const CollectionMenu = () => {
                   className="block mb-2 text-sm font-bold text-gray-700"
                   htmlFor="collectionName"
                 >
-                  Collection Name
+                  Collection Name 
                 </label>
                 <input
                   className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
@@ -143,6 +143,7 @@ const CollectionMenu = () => {
                   placeholder="Collection name"
                   required
                 />
+                <p className='block mb-2 mt-1 text-sm font-medium text-red-700'>(please use snake_case format)</p>
               </div>
               <div className="mb-6">
                 <label

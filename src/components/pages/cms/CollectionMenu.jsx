@@ -1,8 +1,8 @@
 import {useState} from "react";
-import DashboardTemplate from "../../components/templates/cms/DashboardTemplate";
-import HeaderMenu from "../../components/organism/cms/HeaderMenu";
-import CollectionTable from "../../components/organism/cms/datatables/CollectionTable";
-import BaseModal from "../../components/molecules/BaseModal";
+import DashboardTemplate from "../../templates/cms/DashboardTemplate";
+import HeaderMenu from "../../organism/cms/HeaderMenu";
+import CollectionTable from "../../organism/cms/datatables/CollectionTable";
+import BaseModal from "../../molecules/BaseModal";
 
 const CollectionMenu = () => {
   const breadcrumbPath = [

@@ -1,5 +1,5 @@
 import React from 'react'
-import DashboardTemplate from '../../components/templates/cms/DashboardTemplate'
+import DashboardTemplate from '../../templates/cms/DashboardTemplate'
 
 const Dashboard = () => {
   return (

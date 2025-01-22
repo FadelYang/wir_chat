@@ -1,6 +1,6 @@
 import React from "react";
-import DashboardTemplate from "../../components/templates/cms/DashboardTemplate";
-import HeaderMenu from "../../components/organism/cms/HeaderMenu";
+import DashboardTemplate from "../../templates/cms/DashboardTemplate";
+import HeaderMenu from "../../organism/cms/HeaderMenu";
 
 const DatabaseMenu = () => {
   const breadcrumbPath = [

@@ -1,10 +1,10 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import HomePage from './pages/HomePage';
-import Dashboard from './pages/cms/Dashboard';
-import LanguageMenu from './pages/cms/LanguageMenu';
-import CollectionMenu from './pages/cms/CollectionMenu';
-import DatabaseMenu from './pages/cms/DatabaseMenu';
+import HomePage from './components/pages/HomePage';
+import Dashboard from './components/pages/cms/Dashboard';
+import LanguageMenu from './components/pages/cms/LanguageMenu';
+import CollectionMenu from './components/pages/cms/CollectionMenu';
+import DatabaseMenu from './components/pages/cms/DatabaseMenu';
 
 function App() {
   return (

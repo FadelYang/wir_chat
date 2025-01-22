@@ -15,3 +15,8 @@ export const getLanguages = async () => {
     throw new Error("Failed to connect to the database. Please try again later.");
   }
 };
+
+export const updateSelectedCollection = async (language, newSelectedCollection) => {
+  const docRef = doc(db, "languages", language);
+  await updateDoc(docRef, {selected_collection: newSelectedCollection})
+}

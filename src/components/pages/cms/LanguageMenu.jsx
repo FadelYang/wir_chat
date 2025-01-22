@@ -21,8 +21,9 @@ const LanguageMenu = () => {
       <div className="mt-14">
         <div className="flex justify-end">
           <button
-            className="px-4 py-2 text-sm text-white bg-gray-900 rounded hover:bg-gray-950"
+            className="px-4 py-2 text-sm text-white bg-gray-700 rounded hover:bg-gray-750"
             onClick={() => modalToggle()}
+            disabled
           >
             Add new laguage
           </button>

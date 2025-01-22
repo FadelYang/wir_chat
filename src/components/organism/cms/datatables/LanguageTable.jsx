@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import BaseTable from "./BaseTable";
-import { getLanguages } from "../../../../firebase/languageService";
+import {
+  getLanguages,
+  updateSelectedCollection,
+} from "../../../../firebase/languageService";
 import BaseModal from "../../../molecules/BaseModal";
 import {
   getCollectionByLanguage,
@@ -15,8 +18,10 @@ const LanguageTable = () => {
   const [isLoadingCollections, setIsLoadingCollections] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [selectedLanguage, setSelectedLanguage] = useState("");
+  const [selectedDatabaseLocation, setSelectedDatabaseLocation] = useState("");
   const [selectedCollection, setSelectedCollection] = useState("");
   const [selectedLanguageId, setSelectedLanguageId] = useState("");
+  const [isUpdatting, setIsUpdatting] = useState(false);
 
   const fetchLanguages = async () => {
     const data = await getLanguages();
@@ -25,8 +30,11 @@ const LanguageTable = () => {
 
   const openEditModal = (selectedRow) => {
     setSelectedRow(selectedRow);
+    console.log(selectedRow);
     setSelectedLanguage(selectedRow["language"]);
+    setSelectedDatabaseLocation(selectedRow["db_location"]);
     setSelectedCollection(selectedRow["selected_collection"]);
+    setSelectedLanguageId(selectedRow["id"]);
     setIsEditModalOpen(true);
     console.log({ selectedCollection, selectedLanguage });
   };
@@ -49,10 +57,28 @@ const LanguageTable = () => {
         ? selectedRow["selected_collection"]
         : "No collection selected"
     );
+  };
 
-    console.log({
-      collectionData: updatedCollectionData,
-    });
+  const updateLanguage = async (language, newSelectedCollection) => {
+    const isConfirm = window.confirm(
+      "Are you sure? Pleae check the input again before submitting"
+    );
+
+    if (!isConfirm) {
+      setIsEditModalOpen(false);
+      return;
+    }
+
+    try {
+      setIsUpdatting(true);
+      await updateSelectedCollection(language, newSelectedCollection);
+      setIsUpdatting(false);
+      alert(`Success updated ${selectedLanguage} collections`);
+      fetchLanguages();
+      setIsEditModalOpen(false);
+    } catch (error) {
+      alert(`Error: ${error.message || "Failed to edit selected collection"}`);
+    }
   };
 
   useEffect(() => {
@@ -64,7 +90,7 @@ const LanguageTable = () => {
       setIsLoadingCollections(true);
       setSelectedCollection("loading data...");
 
-      await loadCollectionData(selectedLanguage);
+      await loadCollectionData(selectedDatabaseLocation);
 
       if (selectedRow) {
         setSelectedCollection(selectedRow["selected_collection"]);
@@ -74,12 +100,13 @@ const LanguageTable = () => {
     };
 
     fetchCollectionData();
-  }, [selectedLanguage, selectedRow]);
+  }, [selectedRow, selectedDatabaseLocation]);
 
   const languageTableDefinition = [
     {
-      header: "id",
-      accessorKey: "id",
+      Header: 'Index',
+      id: 'index',
+      cell: ({ row }) => row.index + 1
     },
     {
       header: "Language",
@@ -156,8 +183,8 @@ const LanguageTable = () => {
                     className="block w-full px-4 py-2 pr-8 leading-tight text-gray-700 bg-white border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                     id="databaseLocation"
                     name="databaseLocation"
-                    value={selectedLanguage}
-                    onChange={(e) => setSelectedLanguage(e.target.value)}
+                    value={selectedDatabaseLocation}
+                    onChange={(e) => setSelectedDatabaseLocation(e.target.value)}
                   >
                     <option value="indonesia">Indonesia</option>
                     <option value="english">English</option>
@@ -218,10 +245,12 @@ const LanguageTable = () => {
                 <button
                   className="px-4 py-2 text-sm font-bold text-white bg-gray-900 rounded hover:bg-gray-950 focus:outline-none focus:shadow-outline disabled:bg-gray-500"
                   type="submit"
-                  // disabled={isSubmitting}
+                  disabled={isUpdatting}
+                  onClick={() =>
+                    updateLanguage(selectedLanguageId, selectedCollection)
+                  }
                 >
-                  {/* {isSubmitting ? "Adding..." : "Edit"} */}
-                  Edit
+                  {isUpdatting ? "Editting..." : "Edit"}
                 </button>
               </div>
             </form>

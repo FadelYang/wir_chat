@@ -1,13 +1,30 @@
-import React, {useState, useEffect} from "react";
-import {Link} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import MainFullLogo from "../../atoms/MainFullLogo";
+import { signOut } from "firebase/auth";
+import { auth } from "../../../firebase/firebase";
 
-const DashboardTemplate = ({children}) => {
+const DashboardTemplate = ({ children }) => {
   const [isProfilDropdownOpen, setIsProfilDropdownOpen] = useState(false);
   const [openSidebarMenu, setOpenSidebarMenu] = useState("dashboardMenu");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [selectedRoute, setSelectedRoute] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    const isConfirm = confirm("Are you sure?");
+
+    if (isConfirm) {
+      signOut(auth).then(() => {
+        navigate('/')
+        alert('Success Logout')
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -172,16 +189,9 @@ const DashboardTemplate = ({children}) => {
             {isProfilDropdownOpen && (
               <div className="absolute right-0 w-48 mt-2 bg-white border rounded shadow-lg">
                 <ul className="py-1 list-none ps-0">
-                  {["Profile", "Settings", "Logout"].map((item) => (
-                    <li key={item}>
-                      <Link
-                        to={item}
-                        className="block px-4 py-2 text-gray-700 transition-colors hover:bg-gray-200"
-                      >
-                        {item}
-                      </Link>
-                    </li>
-                  ))}
+                  <li className="block px-4 py-2 text-gray-700 transition-colors hover:bg-gray-200">
+                    <button onClick={() => handleLogout()}>Logout</button>
+                  </li>
                 </ul>
               </div>
             )}

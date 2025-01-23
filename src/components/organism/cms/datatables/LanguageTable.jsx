@@ -30,13 +30,11 @@ const LanguageTable = () => {
 
   const openEditModal = (selectedRow) => {
     setSelectedRow(selectedRow);
-    console.log(selectedRow);
     setSelectedLanguage(selectedRow["language"]);
     setSelectedDatabaseLocation(selectedRow["db_location"]);
     setSelectedCollection(selectedRow["selected_collection"]);
     setSelectedLanguageId(selectedRow["id"]);
     setIsEditModalOpen(true);
-    console.log({ selectedCollection, selectedLanguage });
   };
 
   const loadCollectionData = async (language) => {
@@ -61,7 +59,7 @@ const LanguageTable = () => {
 
   const updateLanguage = async (language, newSelectedCollection) => {
     const isConfirm = window.confirm(
-      "Are you sure? Pleae check the input again before submitting"
+      "Are you sure? Please check the input again before submitting"
     );
 
     if (!isConfirm) {
@@ -87,6 +85,11 @@ const LanguageTable = () => {
 
   useEffect(() => {
     const fetchCollectionData = async () => {
+      if (!selectedDatabaseLocation) {
+        setCollectionsBySelectedLanguage([]);
+        return;
+      }
+
       setIsLoadingCollections(true);
       setSelectedCollection("loading data...");
 
@@ -100,7 +103,7 @@ const LanguageTable = () => {
     };
 
     fetchCollectionData();
-  }, [selectedRow, selectedDatabaseLocation]);
+  }, [selectedDatabaseLocation, selectedRow]);
 
   const languageTableDefinition = [
     {

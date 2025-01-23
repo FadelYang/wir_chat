@@ -1,17 +1,21 @@
-import wirLogo from '/logo.png';
-import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react';
-import { useContext, useState } from 'react';
-import chinaFlag from '/flag/china.png';
-import indonesiaFlag from '/flag/flag.png';
-import japanFlag from '/flag/japan.png';
-import unitedKingdomFlag from '/flag/united-kingdom.png';
-import { LanguageContext } from '../../context/LanguageContext';
+import wirLogo from "/logo.png";
+import {
+  Listbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
+} from "@headlessui/react";
+import { useContext, useState } from "react";
+import chinaFlag from "/flag/china.png";
+import indonesiaFlag from "/flag/flag.png";
+import japanFlag from "/flag/japan.png";
+import unitedKingdomFlag from "/flag/united-kingdom.png";
+import { LanguageContext } from "../../context/LanguageContext";
+import { getLanguageByLanguageCode } from '../../firebase/languageService';
 
 export default function () {
-  const {
-    startNewChatButtonText,
-    startNewChatConfirmationText
-  } = useContext(LanguageContext);
+  const { startNewChatButtonText, startNewChatConfirmationText } =
+    useContext(LanguageContext);
 
   const clearChat = (e) => {
     e.preventDefault();
@@ -19,37 +23,55 @@ export default function () {
     const confirmed = window.confirm(`${startNewChatConfirmationText}`);
 
     if (confirmed) {
-      localStorage.removeItem('conversations');
-      localStorage.removeItem('sessionId');
+      localStorage.removeItem("conversations");
+      localStorage.removeItem("sessionId");
       window.location.reload();
     }
   };
 
+  const getLanguageConfig = async () => {
+
+  };
+
   const languages = [
-    { imageSize: '25px', flag: indonesiaFlag, name: 'Indonesian', code: 'id' },
-    { imageSize: '25px', flag: chinaFlag, name: 'Chinese', code: 'zhCn' },
-    { imageSize: '25px', flag: japanFlag, name: 'Japanese', code: 'ja' },
-    { imageSize: '25px', flag: unitedKingdomFlag, name: 'English', code: 'en' },
+    { imageSize: "25px", flag: indonesiaFlag, name: "Indonesian", code: "id" },
+    { imageSize: "25px", flag: chinaFlag, name: "Chinese", code: "zhCn" },
+    { imageSize: "25px", flag: japanFlag, name: "Japanese", code: "ja" },
+    { imageSize: "25px", flag: unitedKingdomFlag, name: "English", code: "en" },
   ];
 
   const [selectedLanguage, setSelectedLanguage] = useState(() => {
-    const savedLanguage = localStorage.getItem('languageCode');
-    return languages.find(language => language.code === savedLanguage) || languages[0];
+    const savedLanguage = localStorage.getItem("languageCode");
+    return (
+      languages.find((language) => language.code === savedLanguage) ||
+      languages[0]
+    );
   });
+  const [languageConfig, setLanguageConfig] = useState(null);
 
-  const handleLanguageChange = (newLanguage) => {
+  const handleLanguageChange = async (newLanguage) => {
     if (newLanguage !== selectedLanguage) {
-      const confirmed = window.confirm(
-        `${startNewChatConfirmationText}`
-      );
+      const confirmed = window.confirm(`${startNewChatConfirmationText}`);
       if (confirmed) {
-        localStorage.removeItem('conversations');
-        localStorage.removeItem('sessionId');
-        localStorage.removeItem('languageCode');
+        localStorage.removeItem("conversations");
+        localStorage.removeItem("sessionId");
+        localStorage.removeItem("languageCode");
+        localStorage.removeItem("selectedCollection");
+        localStorage.removeItem("dbLocaion");
 
         setSelectedLanguage(newLanguage);
 
-        localStorage.setItem('languageCode', newLanguage.code);
+        console.log({newLanguage});
+
+        // get language configuration
+        const languageConfig = await getLanguageByLanguageCode(newLanguage.code);
+
+        const selectedCollection = languageConfig[0].selected_collection;
+        const dbLocation = languageConfig[0].db_location;
+    
+        localStorage.setItem("languageCode", newLanguage.code);
+        localStorage.setItem("selectedCollection", selectedCollection);
+        localStorage.setItem("dbLocaion", dbLocation);
         window.location.reload();
       }
     }
@@ -58,20 +80,25 @@ export default function () {
   return (
     <>
       <div className="sticky top-0 z-10 px-5 py-5 bg-white border border-b-gray-300 md:px-20 ">
-        <div className='container flex mx-auto'>
-          <div className='flex items-center gap-2'>
-            <img src={wirLogo} className='w-14' />
-            <div className='hidden md:block'>WIR Chat</div>
+        <div className="container flex mx-auto">
+          <div className="flex items-center gap-2">
+            <img src={wirLogo} className="w-14" />
+            <div className="hidden md:block">WIR Chat</div>
           </div>
-          <div className='flex items-center gap-1 ms-auto'>
+          <div className="flex items-center gap-1 ms-auto">
             {/* Language seleciton dropdowm */}
             <div className="">
               <Listbox value={selectedLanguage} onChange={handleLanguageChange}>
                 <div className="relative">
                   <ListboxButton className="px-4 py-2 bg-gray-200 rounded-md">
-                    <div className='flex gap-1'>
-                      <img src={selectedLanguage.flag} width={selectedLanguage.imageSize}></img>
-                      <div className='hidden md:block'>{selectedLanguage.name}</div>
+                    <div className="flex gap-1">
+                      <img
+                        src={selectedLanguage.flag}
+                        width={selectedLanguage.imageSize}
+                      ></img>
+                      <div className="hidden md:block">
+                        {selectedLanguage.name}
+                      </div>
                     </div>
                   </ListboxButton>
                   <ListboxOptions className="absolute z-50 mt-1 overflow-auto bg-white rounded-md shadow-lg min-w-48">
@@ -80,7 +107,9 @@ export default function () {
                         key={index}
                         value={language}
                         className={({ active, selected }) =>
-                          `${active ? 'text-white bg-red-500' : ''} ${selected ? 'font-semibold' : ''} cursor-pointer select-none relative py-2 pl-10 pr-4`
+                          `${active ? "text-white bg-red-500" : ""} ${
+                            selected ? "font-semibold" : ""
+                          } cursor-pointer select-none relative py-2 pl-10 pr-4`
                         }
                       >
                         {({ selected }) => (
@@ -102,9 +131,12 @@ export default function () {
                                 </svg>
                               </span>
                             )}
-                            <div className='flex gap-1'>
-                              <img src={language.flag} width={language.imageSize}></img>
-                              <div className=''>{language.name}</div>
+                            <div className="flex gap-1">
+                              <img
+                                src={language.flag}
+                                width={language.imageSize}
+                              ></img>
+                              <div className="">{language.name}</div>
                             </div>
                           </>
                         )}
@@ -114,10 +146,15 @@ export default function () {
                 </div>
               </Listbox>
             </div>
-            <button onClick={clearChat} className='px-5 py-2 text-white bg-black rounded-md hover:bg-gray-900 hover:cursor-pointer'>{startNewChatButtonText}</button>
+            <button
+              onClick={clearChat}
+              className="px-5 py-2 text-white bg-black rounded-md hover:bg-gray-900 hover:cursor-pointer"
+            >
+              {startNewChatButtonText}
+            </button>
           </div>
         </div>
       </div>
     </>
   );
-};
+}

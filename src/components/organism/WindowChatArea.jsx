@@ -18,7 +18,9 @@ const WindowChatArea = ({
   const {
     errorMessage,
     loadingText,
-    changeLanguage
+    changeLanguage,
+    languageSelectedCollection,
+    languageDbLocation
   } = useContext(LanguageContext);
   const bottomOfChatArea = useRef(null);
   const latestBotMessage = useRef(null);
@@ -31,6 +33,8 @@ const WindowChatArea = ({
 
     let sessionId = localStorage.getItem('sessionId');
     const selectedLanguageCode = localStorage.getItem('languageCode');
+    const selectedCollection = localStorage.getItem('selectedCollection');
+    const selectedDbLocation = localStorage.getItem('dbLocation');
 
     if (!sessionId) {
       sessionId = uuidv4();
@@ -40,12 +44,14 @@ const WindowChatArea = ({
     const requestParams = {
       message: inputMessage,
       session_id: sessionId,
-      language: selectedLanguageCode
+      language: selectedLanguageCode,
+      db_location: selectedDbLocation,
+      collection_name: selectedCollection
     };
 
     setIsRequestPending(true);
 
-    const response = await fetch(process.env.REACT_APP_BACKEND_URL, {
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/generate-text`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

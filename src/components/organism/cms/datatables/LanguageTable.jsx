@@ -86,7 +86,7 @@ const LanguageTable = () => {
   useEffect(() => {
     const fetchCollectionData = async () => {
       if (!selectedDatabaseLocation) {
-        setCollectionsBySelectedLanguage([]);
+        setSelectedDatabaseLocation([]);
         return;
       }
 

@@ -61,8 +61,6 @@ export default function () {
 
         setSelectedLanguage(newLanguage);
 
-        console.log({newLanguage});
-
         // get language configuration
         const languageConfig = await getLanguageByLanguageCode(newLanguage.code);
 

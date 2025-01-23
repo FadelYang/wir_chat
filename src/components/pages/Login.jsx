@@ -18,13 +18,10 @@ const Login = () => {
         const user = userCredential.user;
         navigate("/dashboard");
         setError(false);
-        console.log(user);
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
         setError(true);
-        console.log({ error });
         if (errorMessage == "Firebase: Error (auth/too-many-requests).") {
           setErrorMessage(
             "Terlalu banyak percobaan, silahkan coba lagi beberapa saat"
@@ -32,7 +29,6 @@ const Login = () => {
         } else {
           setErrorMessage("Email atau password salah");
         }
-        console.log(errorCode, errorMessage);
       });
   };
 

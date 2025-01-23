@@ -4,7 +4,7 @@ import BaseTable from "./BaseTable";
 
 export const getCollectionByLanguage = async (language) => {
   try {
-    const url = `${process.env.REACT_APP_BACKEND_URL_DEVELOPEMENT}/list-database?db_location=${language}`;
+    const url = `${process.env.REACT_APP_BACKEND_URL}/list-database?db_location=${language}`;
     const response = await fetch(url, {
       method: "GET",
       headers: {

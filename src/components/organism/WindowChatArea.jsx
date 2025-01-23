@@ -101,12 +101,7 @@ const WindowChatArea = ({
 
   const onTemplateMessageClick = (e) => {
     e.preventDefault();
-    console.log('Suggest message button clicked');
     setInputMessage(e.target.value);
-    console.log({
-      buttonvalue: e.target.value,
-      inputMessageState: inputMessage
-    });
   };
 
   const scrollToChatArea = () => {

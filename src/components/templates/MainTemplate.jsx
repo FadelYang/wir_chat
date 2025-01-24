@@ -6,7 +6,7 @@ const MainTemplate = ({ children }) => {
   return (
     <div className="container-fluid flex flex-col min-h-screen mx-auto">
       <NavBar />
-      <div className="flex-grow">{children}</div>
+      {children}
       <Footer />
     </div>
   );

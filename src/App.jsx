@@ -7,8 +7,16 @@ import CollectionMenu from "./components/pages/cms/CollectionMenu";
 import DatabaseMenu from "./components/pages/cms/DatabaseMenu";
 import Login from "./components/pages/Login";
 import { ProtectedRoute } from "./utils/ProtectedRoute";
+import { useContext } from 'react';
+import { AuthContext } from './context/AuthContext';
 
 function App() {
+  const { user } =  useContext(AuthContext)
+
+  if (user === undefined) {
+    return null;
+  }
+
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />

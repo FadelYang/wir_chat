@@ -54,7 +54,7 @@ const CollectionMenu = () => {
       postCollectionFormData.append("components", "File-h8zKv");
 
       const response = await fetch(
-        "http://172.20.12.200:5000/upload-collection",
+        `${process.env.REACT_APP_BACKEND_URL}/upload-collection`,
         {
           method: "POST",
           body: postCollectionFormData,

@@ -51,7 +51,7 @@ const CollectionMenu = () => {
         "store_db_location",
         formData.databaseLocation
       );
-      postCollectionFormData.append("components", "File-h8zKv");
+      postCollectionFormData.append("components", "File-aA0Wu");
 
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_URL}/upload-collection`,

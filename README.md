@@ -26,3 +26,8 @@ Currently, two official plugins are available:
 - Add Session ID
 ## Version 3.0.0
 - Add Languange options (English, Japan, Chineese)
+- Add ui versioning
+
+## Version 3.1.0
+- Add CMS for update languange and selected collection for each language
+

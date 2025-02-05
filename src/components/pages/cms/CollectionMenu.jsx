@@ -52,6 +52,8 @@ const CollectionMenu = () => {
         formData.databaseLocation
       );
       postCollectionFormData.append("components", "File-aA0Wu");
+      // local File-h8zKv
+      // staging File-aA0Wu
 
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_URL}/upload-collection`,
@@ -131,7 +133,7 @@ const CollectionMenu = () => {
                   className="block mb-2 text-sm font-bold text-gray-700"
                   htmlFor="collectionName"
                 >
-                  Collection Name 
+                  Collection Name
                 </label>
                 <input
                   className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
@@ -143,7 +145,9 @@ const CollectionMenu = () => {
                   placeholder="Collection name"
                   required
                 />
-                <p className='block mb-2 mt-1 text-sm font-medium text-red-700'>(please use snake_case format)</p>
+                <p className="block mb-2 mt-1 text-sm font-medium text-red-700">
+                  (please use snake_case format)
+                </p>
               </div>
               <div className="mb-6">
                 <label

@@ -1,6 +1,5 @@
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import BaseTable from "./BaseTable";
-
 
 export const getCollectionByLanguage = async (language) => {
   try {
@@ -41,11 +40,13 @@ export const getCollectionItemFromResponse = (response) => {
 const CollectionTable = () => {
   const [collections, setCollections] = useState([]);
   const [formattedData, setFormattedData] = useState([]);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [isLoading, setIsloading] = useState(true);
 
   const existingLanguages = ["indonesia", "english", "china", "japan"];
 
   const getAllCollections = async () => {
+    console.log({isDeleting});
     const allCollections = [];
     let index = 1;
 
@@ -58,7 +59,7 @@ const CollectionTable = () => {
             id: index,
             collectionName: collection,
             databaseLocation: language,
-            action: "dummy action",
+            // action: "dummy action",
           });
           index++;
         });
@@ -68,6 +69,39 @@ const CollectionTable = () => {
     setCollections(allCollections);
     sessionStorage.setItem("collections", JSON.stringify(allCollections));
     setIsloading(false);
+  };
+
+  const deleteCollection = async (language, collectionName) => {
+    const isConfirm = confirm("Are you sure?");
+
+    if (!isConfirm) return;
+
+    const requestData = new FormData();
+    requestData.append("language", language);
+    requestData.append("collection_name", collectionName);
+
+    const deleteCollectionUrl = `${process.env.REACT_APP_BACKEND_URL}/delete-database`;
+
+    try {
+      setIsDeleting(true);
+      const response = await fetch(deleteCollectionUrl, {
+        method: "POST",
+        body: requestData,
+      });
+
+      setCollections((collections) =>
+        collections.filter(
+          (collection) =>
+            collection.collectionName !== collectionName ||
+            collection.databaseLocation !== language
+        )
+      );
+
+      alert(`Success deleted ${collectionName} in ${language} database`);
+      setIsDeleting(false)
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const collectionTableDefinition = [
@@ -85,12 +119,34 @@ const CollectionTable = () => {
     },
     {
       header: "Action",
-      accessorKey: "action",
+      id: "action",
+      cell: !isDeleting
+        ? ({ row }) => (
+            <button
+              className="px-4 py-2 rounded bg-black text-white"
+              onClick={() =>
+                deleteCollection(
+                  row.original.databaseLocation,
+                  row.original.collectionName
+                )
+              }
+            >
+              Delete
+            </button>
+          )
+        : ({ row }) => (
+            <button
+              className="px-4 py-2 rounded bg-gray-800 text-white"
+              disabled
+            >
+              Deleting collection...
+            </button>
+          ),
     },
   ];
 
   useEffect(() => {
-      getAllCollections();
+    getAllCollections();
   }, []);
 
   return (

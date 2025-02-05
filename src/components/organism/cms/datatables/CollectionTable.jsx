@@ -134,7 +134,7 @@ const CollectionTable = () => {
               disabled
             >
               {row.original.collectionName === selectedRow
-                ? "Deleting collection..."
+                ? "Deleting..."
                 : "Delete"}
             </button>
           ),

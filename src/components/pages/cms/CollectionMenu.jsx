@@ -3,6 +3,7 @@ import DashboardTemplate from "../../templates/cms/DashboardTemplate";
 import HeaderMenu from "../../organism/cms/HeaderMenu";
 import CollectionTable from "../../organism/cms/datatables/CollectionTable";
 import BaseModal from "../../molecules/BaseModal";
+import { useCollections } from '../../../context/CollectionContext';
 
 const CollectionMenu = () => {
   const breadcrumbPath = [
@@ -17,6 +18,7 @@ const CollectionMenu = () => {
     collectionName: "",
     databaseLocation: "indonesia",
   });
+  const { addCollection } = useCollections();
 
   const handleFormChange = (event) => {
     const { name, value, type, files } = event.target;
@@ -76,7 +78,7 @@ const CollectionMenu = () => {
         databaseLocation: "",
       });
       setIsModalOpen(false);
-      window.location.reload();
+      addCollection({ collectionName: formData.collectionName, databaseLocation: formData.databaseLocation })
     } catch (error) {
       console.error("Error uploading collection:", error);
       alert(`Error: ${error.message || "Failed to upload collection"}`);

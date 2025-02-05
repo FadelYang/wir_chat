@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import BaseTable from "./BaseTable";
+import { useCollections } from "../../../../context/CollectionContext";
 
 export const getCollectionByLanguage = async (language) => {
   try {
@@ -38,17 +39,16 @@ export const getCollectionItemFromResponse = (response) => {
 };
 
 const CollectionTable = () => {
-  const [collections, setCollections] = useState([]);
-  const [formattedData, setFormattedData] = useState([]);
+  const { collections, setCollections, removeCollection } = useCollections();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isLoading, setIsloading] = useState(true);
+  const [selectedRow, setSelectedRow] = useState("");
 
   const existingLanguages = ["indonesia", "english", "china", "japan"];
 
   const getAllCollections = async () => {
-    console.log({isDeleting});
+    console.log({ isDeleting });
     const allCollections = [];
-    let index = 1;
 
     for (let language of existingLanguages) {
       const rawCollections = await getCollectionByLanguage(language);
@@ -56,12 +56,10 @@ const CollectionTable = () => {
         const cleanCollections = getCollectionItemFromResponse(rawCollections);
         cleanCollections.forEach((collection) => {
           allCollections.push({
-            id: index,
             collectionName: collection,
             databaseLocation: language,
             // action: "dummy action",
           });
-          index++;
         });
       }
     }
@@ -89,16 +87,11 @@ const CollectionTable = () => {
         body: requestData,
       });
 
-      setCollections((collections) =>
-        collections.filter(
-          (collection) =>
-            collection.collectionName !== collectionName ||
-            collection.databaseLocation !== language
-        )
-      );
+      removeCollection(language, collectionName);
 
       alert(`Success deleted ${collectionName} in ${language} database`);
-      setIsDeleting(false)
+      setIsDeleting(false);
+      setSelectedRow("");
     } catch (error) {
       console.log(error);
     }
@@ -107,7 +100,7 @@ const CollectionTable = () => {
   const collectionTableDefinition = [
     {
       header: "id",
-      accessorKey: "id",
+      cell: ({ row }) => row.index + 1,
     },
     {
       header: "Collection Name",
@@ -124,22 +117,25 @@ const CollectionTable = () => {
         ? ({ row }) => (
             <button
               className="px-4 py-2 rounded bg-black text-white"
-              onClick={() =>
+              onClick={() => {
                 deleteCollection(
                   row.original.databaseLocation,
                   row.original.collectionName
-                )
-              }
+                );
+                setSelectedRow(row.original.collectionName);
+              }}
             >
               Delete
             </button>
           )
         : ({ row }) => (
             <button
-              className="px-4 py-2 rounded bg-gray-800 text-white"
+              className="px-4 py-2 rounded bg-gray-800 text-white disabled:bg-gray-500"
               disabled
             >
-              Deleting collection...
+              {row.original.collectionName === selectedRow
+                ? "Deleting collection..."
+                : "Delete"}
             </button>
           ),
     },

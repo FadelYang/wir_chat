@@ -1,5 +1,6 @@
 {
   "name": "wir-chat",
+  "homepage": "/",
   "private": true,
   "version": "0.0.0",
   "type": "module",

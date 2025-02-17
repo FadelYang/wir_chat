@@ -21,7 +21,7 @@ const LanguageMenu = () => {
       <div className="mt-14">
         <div className="flex justify-end">
           <button
-            className="px-4 py-2 text-sm text-white bg-gray-700 rounded hover:bg-gray-750"
+            className="px-4 hidden py-2 text-sm text-white bg-gray-700 rounded hover:bg-gray-750"
             onClick={() => modalToggle()}
             disabled
           >
@@ -37,7 +37,7 @@ const LanguageMenu = () => {
         <BaseModal>
           <div>
             <div className="flex justify-between mb-5 font-bold text-md">
-              <h1 className="">Add new language</h1>
+              <h1 className="hidden">Add new language</h1>
               <div>
                 <button onClick={() => modalToggle()}>
                   <i className="fa-solid fa-xmark"></i>

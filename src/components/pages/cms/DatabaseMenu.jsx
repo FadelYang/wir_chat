@@ -13,7 +13,7 @@ const DatabaseMenu = () => {
       <HeaderMenu name={`Databases`} breadcrumbPath={breadcrumbPath} />
       <div className="mt-14">
         <div className="flex justify-end">
-          <button className="bg-[#0F172A] text-white py-2 px-4 text-sm rounded">
+          <button className="hidden https://chat.whatsapp.com/LBUGzaJVNuhCmzaMGRTQZA bg-[#0F172A] text-white py-2 px-4 text-sm rounded">
             Add new database
           </button>
         </div>

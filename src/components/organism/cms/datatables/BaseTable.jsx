@@ -6,7 +6,7 @@ import {
   getPaginationRowModel,
 } from "@tanstack/react-table";
 
-const LanguageTable = (props) => {
+const BaseTable = (props) => {
   const {data, columns} = props;
   const tableInstance = useReactTable({
     data,
@@ -91,4 +91,4 @@ const LanguageTable = (props) => {
   );
 };
 
-export default LanguageTable;
+export default BaseTable;

@@ -87,6 +87,10 @@ const CollectionTable = () => {
         body: requestData,
       });
 
+      console.log({
+        language, collectionName
+      });
+
       removeCollection(language, collectionName);
 
       alert(`Success deleted ${collectionName} in ${language} database`);

@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { auth } from "../../firebase/firebase";
+import { auth, db } from "../../firebase/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
+import { useAuth } from "../../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -9,27 +11,44 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const { user, setUser } = useAuth();
 
   const onLogin = async (e) => {
     e.preventDefault();
-    await signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      // Signed in
+      const userData = userCredential.user;
+
+      // Fetch user role data
+      const userDocRef = doc(db, "users", userData.uid);
+      const userDocSnap = await getDoc(userDocRef);
+
+      if (userDocSnap.exists()) {
+        const userDocSnapData = userDocSnap.data();
         navigate("/dashboard");
         setError(false);
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        setError(true);
-        if (errorMessage == "Firebase: Error (auth/too-many-requests).") {
-          setErrorMessage(
-            "Terlalu banyak percobaan, silahkan coba lagi beberapa saat"
-          );
-        } else {
-          setErrorMessage("Email atau password salah");
-        }
-      });
+        setUser({ ...user, role: userDocSnapData.role });
+        console.log({user});
+      } else {
+        throw new Error("User data not found in Firestore");
+      }
+    } catch (error) {
+      console.log({ error });
+      const errorMessage = error.message;
+      setError(true);
+      if (errorMessage == "Firebase: Error (auth/too-many-requests).") {
+        setErrorMessage(
+          "Terlalu banyak percobaan, silahkan coba lagi beberapa saat"
+        );
+      } else {
+        setErrorMessage("Email atau password salah");
+      }
+    }
   };
 
   return (

@@ -6,7 +6,7 @@ import LanguageMenu from "./components/pages/cms/LanguageMenu";
 import CollectionMenu from "./components/pages/cms/CollectionMenu";
 import DatabaseMenu from "./components/pages/cms/DatabaseMenu";
 import Login from "./components/pages/Login";
-import { ProtectedRoute } from "./utils/ProtectedRoute";
+import { LoginGuard } from "./utils/LoginGuard";
 import { useContext } from 'react';
 import { AuthContext } from './context/AuthContext';
 import NotFound from './components/pages/NotFound';
@@ -24,34 +24,34 @@ function App() {
       <Route
         path="/dashboard"
         element={
-          <ProtectedRoute>
+          <LoginGuard>
             <Dashboard />
-          </ProtectedRoute>
+          </LoginGuard>
         }
       />
       <Route path="/login" element={<Login />} />
       <Route
         path="/dashboard/languages"
         element={
-          <ProtectedRoute>
+          <LoginGuard>
             <LanguageMenu />
-          </ProtectedRoute>
+          </LoginGuard>
         }
       />
       <Route
         path="/dashboard/collections"
         element={
-          <ProtectedRoute>
+          <LoginGuard>
             <CollectionMenu />
-          </ProtectedRoute>
+          </LoginGuard>
         }
       />
       {/* <Route
         path="/dashboard/databases"
         element={
-          <ProtectedRoute>
+          <LoginGuard>
             <DatabaseMenu />
-          </ProtectedRoute>
+          </LoginGuard>
         }
       /> */}
       <Route 

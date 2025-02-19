@@ -205,8 +205,11 @@ const DashboardTemplate = ({ children }) => {
             {isProfilDropdownOpen && (
               <div className="absolute right-0 w-48 mt-2 bg-white border rounded shadow-lg">
                 <ul className="py-1 list-none ps-0">
-                  <li className="block px-4 py-2 text-gray-700 transition-colors hover:bg-gray-200">
-                    <button onClick={() => handleLogout()}>Logout</button>
+                  <li
+                    className="block px-4 py-2 text-gray-700 transition-colors hover:bg-gray-200"
+                    onClick={() => handleLogout()}
+                  >
+                    <button>Logout</button>
                   </li>
                 </ul>
               </div>

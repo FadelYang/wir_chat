@@ -12,7 +12,7 @@ export const AdminGuard = ({ children }) => {
       navigate("/login");
     }
 
-    if (user.role !== "admin" && !alertShown.current) {
+    if (user && user.role !== "admin" && !alertShown.current) {
       alert("You do not have permission to access this page");
       alertShown.current = true;
       navigate("/dashboard");

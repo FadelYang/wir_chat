@@ -7,7 +7,11 @@ import gearIcon from "/gear-solid.svg";
 
 const DashboardTemplate = ({ children }) => {
   const [isProfilDropdownOpen, setIsProfilDropdownOpen] = useState(false);
-  const [openSidebarMenu, setOpenSidebarMenu] = useState("dashboardMenu");
+  const [openSidebarMenu, setOpenSidebarMenu] = useState(() => {
+    return (
+      JSON.parse(localStorage.getItem("openSidebarMenu")) || ["dashboardMenu"]
+    );
+  });
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [selectedRoute, setSelectedRoute] = useState("");
@@ -57,12 +61,15 @@ const DashboardTemplate = ({ children }) => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const handleShowSidebarMenu = (key) => {
-    if (openSidebarMenu === key) {
-      setOpenSidebarMenu(null);
-    } else {
-      setOpenSidebarMenu(key);
-    }
+  const handleShowSidebarMenu = (menuKey) => {
+    setOpenSidebarMenu((prevMenus) => {
+      const updatedMenus = prevMenus.includes(menuKey)
+        ? prevMenus.filter((key) => key !== menuKey)
+        : [...prevMenus, menuKey];
+
+      localStorage.setItem("openSidebarMenu", JSON.stringify(updatedMenus));
+      return updatedMenus;
+    });
   };
 
   return (
@@ -92,63 +99,70 @@ const DashboardTemplate = ({ children }) => {
             <MainFullLogo className="h-20" />
           </div>
         </div>
-        <ul className="mt-2 mb-0 space-y-1 ps-0">
-          <li className="w-full">
-            <Link
-              to={`/dashboard`}
-              className={`block px-8 py-2 ${
-                selectedRoute === "/dashboard" ? "text-black" : "text-gray-700"
-              } transition-colors rounded hover:bg-gray-200`}
+        <nav>
+          <ul className="mt-2 mb-2 space-y-1 ps-0">
+            <li className="w-full">
+              <Link
+                to={`/dashboard`}
+                className={`block px-8 py-2 ${
+                  selectedRoute === "/dashboard"
+                    ? "text-black"
+                    : "text-gray-700"
+                } transition-colors rounded hover:bg-gray-200`}
+              >
+                Dashboard
+              </Link>
+            </li>
+          </ul>
+        </nav>
+        <div className="flex flex-col gap- 0 px-4">
+          <nav className="">
+            <button
+              className="text-white bg-[#333A48] w-full py-2 rounded flex justify-between px-5 items-center"
+              onClick={() => handleShowSidebarMenu("dashboardMenu")}
             >
-              Dashboard
-            </Link>
-          </li>
-        </ul>
-        <nav className="p-4">
-          <button
-            className="text-white bg-[#333A48] w-full py-2 rounded flex justify-between px-5 items-center"
-            onClick={() => handleShowSidebarMenu("dashboardMenu")}
-          >
-            <span>Main Menu</span>
-            <i
-              className={`fa-solid fa-chevron-up transition-transform duration-200 ${
-                openSidebarMenu === "dashboardMenu" ? "rotate-180" : "rotate-0"
-              }`}
-            />
-          </button>
-          <div>
-            <ul
-              className={`mt-2 ps-0 space-y-1 transition-all duration-200 list-none ${
-                openSidebarMenu === "dashboardMenu"
-                  ? "max-h-48"
-                  : "max-h-0 overflow-hidden"
-              }`}
-            >
-              <li className="w-full">
-                <Link
-                  to={`/dashboard/languages`}
-                  className={`block px-4 py-2 ${
-                    selectedRoute === "/dashboard/languages"
-                      ? "text-black"
-                      : "text-gray-700"
-                  } transition-colors rounded hover:bg-gray-200`}
-                >
-                  Languages
-                </Link>
-              </li>
-              <li className="w-full">
-                <Link
-                  to={`/dashboard/collections`}
-                  className={`block px-4 py-2 ${
-                    selectedRoute === "/dashboard/collections"
-                      ? "text-black"
-                      : "text-gray-700"
-                  } transition-colors rounded hover:bg-gray-200`}
-                >
-                  Collections
-                </Link>
-              </li>
-              {/* <li className="w-full">
+              <span>Main Menu</span>
+              <i
+                className={`fa-solid fa-chevron-up transition-transform duration-200 ${
+                  openSidebarMenu.indexOf("dashboardMenu") !== -1
+                    ? "rotate-180"
+                    : "rotate-0"
+                }`}
+              />
+            </button>
+            <div>
+              <ul
+                className={`mt-2 ps-0 space-y-1 transition-all duration-200 list-none ${
+                  openSidebarMenu.indexOf("dashboardMenu") !== -1
+                    ? "max-h-48"
+                    : "max-h-0 overflow-hidden"
+                }`}
+              >
+                <li className="w-full">
+                  <Link
+                    to={`/dashboard/languages`}
+                    className={`block px-4 py-2 ${
+                      selectedRoute === "/dashboard/languages"
+                        ? "text-black"
+                        : "text-gray-700"
+                    } transition-colors rounded hover:bg-gray-200`}
+                  >
+                    Languages
+                  </Link>
+                </li>
+                <li className="w-full">
+                  <Link
+                    to={`/dashboard/collections`}
+                    className={`block px-4 py-2 ${
+                      selectedRoute === "/dashboard/collections"
+                        ? "text-black"
+                        : "text-gray-700"
+                    } transition-colors rounded hover:bg-gray-200`}
+                  >
+                    Collections
+                  </Link>
+                </li>
+                {/* <li className="w-full">
                 <Link
                   to={`/dashboard/databases`}
                   className={`block px-4 py-2 ${
@@ -160,9 +174,47 @@ const DashboardTemplate = ({ children }) => {
                   DB Locations
                 </Link>
               </li> */}
-            </ul>
-          </div>
-        </nav>
+              </ul>
+            </div>
+          </nav>
+          <nav className="">
+            <button
+              className="text-white bg-[#333A48] w-full py-2 rounded flex justify-between px-5 items-center"
+              onClick={() => handleShowSidebarMenu("userManagementMenu")}
+            >
+              <span>Users Management</span>
+              <i
+                className={`fa-solid fa-chevron-up transition-transform duration-200 ${
+                  openSidebarMenu.indexOf("userManagementMenu") !== -1
+                    ? "rotate-180"
+                    : "rotate-0"
+                }`}
+              />
+            </button>
+            <div>
+              <ul
+                className={`mt-2 ps-0 space-y-1 transition-all duration-200 list-none ${
+                  openSidebarMenu.indexOf("userManagementMenu") !== -1
+                    ? "max-h-48"
+                    : "max-h-0 overflow-hidden"
+                }`}
+              >
+                <li className="w-full">
+                  <Link
+                    to={`/dashboard/users`}
+                    className={`block px-4 py-2 ${
+                      selectedRoute === "/dashboard/users"
+                        ? "text-black"
+                        : "text-gray-700"
+                    } transition-colors rounded hover:bg-gray-200`}
+                  >
+                    Users
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
       </div>
 
       {/* Main Content */}
@@ -184,12 +236,6 @@ const DashboardTemplate = ({ children }) => {
           </div>
 
           <div className="relative">
-            {/* <button
-              className="px-4 py-2 text-white transition-colors rounded bg-slate-800 hover:bg-slate-950"
-              onClick={toggleDropdown}
-            >
-              Menu
-            </button> */}
             <div
               className={`flex justify-end hover:cursor-pointer`}
               onClick={toggleDropdown}

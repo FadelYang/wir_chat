@@ -1,8 +1,17 @@
 import React from 'react'
+import HeaderMenu from '../../organism/cms/HeaderMenu';
+import DashboardTemplate from '../../templates/cms/DashboardTemplate';
 
 const UserMenu = () => {
+  const breadcrumbPath = [
+    {name: "Dashboard", path: "/dashboard"},
+    {name: "Users", path: "/dashboard/users"},
+  ];
+
   return (
-    <div>this is user menu</div>
+    <DashboardTemplate>
+      <HeaderMenu name={'Users'} breadcrumbPath={breadcrumbPath}/>
+    </DashboardTemplate>
   )
 }
 

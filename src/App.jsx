@@ -9,6 +9,7 @@ import Login from "./components/pages/Login";
 import { ProtectedRoute } from "./utils/ProtectedRoute";
 import { useContext } from 'react';
 import { AuthContext } from './context/AuthContext';
+import NotFound from './components/pages/NotFound';
 
 function App() {
   const { user } =  useContext(AuthContext)
@@ -53,6 +54,10 @@ function App() {
           </ProtectedRoute>
         }
       /> */}
+      <Route 
+        path='*'
+        element={<NotFound />}
+      />
     </Routes>
   );
 }

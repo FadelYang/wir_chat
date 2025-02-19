@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import MainFullLogo from "../../atoms/MainFullLogo";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../firebase/firebase";
+import gearIcon from "/gear-solid.svg";
 
 const DashboardTemplate = ({ children }) => {
   const [isProfilDropdownOpen, setIsProfilDropdownOpen] = useState(false);
@@ -17,12 +18,14 @@ const DashboardTemplate = ({ children }) => {
     const isConfirm = confirm("Are you sure?");
 
     if (isConfirm) {
-      signOut(auth).then(() => {
-        navigate('/')
-        alert('Success Logout')
-      }).catch((error) => {
-        console.log(error);
-      });
+      signOut(auth)
+        .then(() => {
+          navigate("/");
+          alert("Success Logout");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
 
@@ -145,7 +148,7 @@ const DashboardTemplate = ({ children }) => {
                   Collections
                 </Link>
               </li>
-              <li className="w-full">
+              {/* <li className="w-full">
                 <Link
                   to={`/dashboard/databases`}
                   className={`block px-4 py-2 ${
@@ -156,7 +159,7 @@ const DashboardTemplate = ({ children }) => {
                 >
                   DB Locations
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
         </nav>
@@ -179,13 +182,26 @@ const DashboardTemplate = ({ children }) => {
               />
             </button>
           </div>
+
           <div className="relative">
-            <button
+            {/* <button
               className="px-4 py-2 text-white transition-colors rounded bg-slate-800 hover:bg-slate-950"
               onClick={toggleDropdown}
             >
               Menu
-            </button>
+            </button> */}
+            <div
+              className={`flex justify-end hover:cursor-pointer`}
+              onClick={toggleDropdown}
+            >
+              <img
+                src={gearIcon}
+                alt=""
+                className={`w-5 h-5 transition-transform duration-300 ${
+                  isProfilDropdownOpen ? "rotate-45" : "-rotate-45"
+                }`}
+              />
+            </div>
             {isProfilDropdownOpen && (
               <div className="absolute right-0 w-48 mt-2 bg-white border rounded shadow-lg">
                 <ul className="py-1 list-none ps-0">

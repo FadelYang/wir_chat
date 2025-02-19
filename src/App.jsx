@@ -45,14 +45,14 @@ function App() {
           </ProtectedRoute>
         }
       />
-      <Route
+      {/* <Route
         path="/dashboard/databases"
         element={
           <ProtectedRoute>
             <DatabaseMenu />
           </ProtectedRoute>
         }
-      />
+      /> */}
     </Routes>
   );
 }

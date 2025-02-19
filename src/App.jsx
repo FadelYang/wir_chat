@@ -4,15 +4,17 @@ import HomePage from "./components/pages/HomePage";
 import Dashboard from "./components/pages/cms/Dashboard";
 import LanguageMenu from "./components/pages/cms/LanguageMenu";
 import CollectionMenu from "./components/pages/cms/CollectionMenu";
-import DatabaseMenu from "./components/pages/cms/DatabaseMenu";
+import UserMenu from "./components/pages/cms/UserMenu";
+// import DatabaseMenu from "./components/pages/cms/DatabaseMenu";
 import Login from "./components/pages/Login";
 import { LoginGuard } from "./utils/LoginGuard";
-import { useContext } from 'react';
-import { AuthContext } from './context/AuthContext';
-import NotFound from './components/pages/NotFound';
+import { AdminGuard } from "./utils/AdminGuard";
+import { useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
+import NotFound from "./components/pages/NotFound";
 
 function App() {
-  const { user } =  useContext(AuthContext)
+  const { user } = useContext(AuthContext);
 
   if (user === undefined) {
     return null;
@@ -46,6 +48,14 @@ function App() {
           </LoginGuard>
         }
       />
+      <Route
+        path="/dashboard/users"
+        element={
+          <AdminGuard>
+            <UserMenu />
+          </AdminGuard>
+        }
+      />
       {/* <Route
         path="/dashboard/databases"
         element={
@@ -54,10 +64,7 @@ function App() {
           </LoginGuard>
         }
       /> */}
-      <Route 
-        path='*'
-        element={<NotFound />}
-      />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

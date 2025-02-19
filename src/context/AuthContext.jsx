@@ -14,22 +14,22 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const userDocRef = doc(db, "users", user.uid);
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        const userDocRef = doc(db, "users", firebaseUser.uid);
         const userDocSnap = await getDoc(userDocRef);
 
         if (userDocSnap.exists()) {
           const userDocSnapData = userDocSnap.data();
-          const userData = { ...user, role: userDocSnapData.role };
+          const userData = { ...firebaseUser, role: userDocSnapData.role };
           setUser(userData);
+        } else {
+          setUser(firebaseUser); // At least set basic user data
         }
-
       } else {
         setUser(null);
-        setUserRole(null);
       }
-      setLoading(false);
+      setLoading(false); // Now the authentication check is complete
     });
 
     return () => unsubscribe();
@@ -37,7 +37,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={{ user, setUser, loading }}>
-      {children}
+      {!loading ? children : <p>Loading...</p>} {/* Prevent showing app until auth is ready */}
     </AuthContext.Provider>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { auth, db } from "../../firebase/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { useAuth } from "../../context/AuthContext";
 
@@ -11,11 +11,13 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { user, setUser } = useAuth();
 
   const onLogin = async (e) => {
     e.preventDefault();
     try {
+      setIsLoading(true);
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
@@ -33,10 +35,11 @@ const Login = () => {
         navigate("/dashboard");
         setError(false);
         setUser({ ...user, role: userDocSnapData.role });
-        console.log({user});
+        console.log({ user });
       } else {
         throw new Error("User data not found in Firestore");
       }
+      setIsLoading(false);
     } catch (error) {
       console.log({ error });
       const errorMessage = error.message;
@@ -48,6 +51,7 @@ const Login = () => {
       } else {
         setErrorMessage("Email atau password salah");
       }
+      setIsLoading(false);
     }
   };
 
@@ -80,7 +84,7 @@ const Login = () => {
                 className="block text-sm font-bold text-gray-700"
                 htmlFor="password"
               >
-                Passowrd
+                Passoword
               </label>
               <input
                 className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
@@ -98,8 +102,18 @@ const Login = () => {
               )}
             </div>
           </div>
-          <div className="flex justify-end">
-            <button type="submit">Login</button>
+          <div className="flex flex-col gap-2">
+            <button
+              type="submit"
+              className={`px-4 py-2 bg-black hover:bg-gray-800 text-white rounded ${
+                isLoading ? "bg-gray-800" : ""
+              } `}
+            >
+              {isLoading ? "Login..." : "Login"}
+            </button>
+            <Link to={"/forgot-password"} className="text-center text-black hover:text-gray-800" href="#">
+              Forgot Password
+            </Link>
           </div>
         </form>
       </div>

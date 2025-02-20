@@ -12,6 +12,7 @@ import { AdminGuard } from "./utils/AdminGuard";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 import NotFound from "./components/pages/NotFound";
+import ForgotPassword from './components/pages/ForgotPassword';
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -32,6 +33,7 @@ function App() {
         }
       />
       <Route path="/login" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route
         path="/dashboard/languages"
         element={

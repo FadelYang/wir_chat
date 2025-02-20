@@ -107,9 +107,9 @@ const LanguageTable = () => {
 
   const languageTableDefinition = [
     {
-      Header: 'Index',
-      id: 'index',
-      cell: ({ row }) => row.index + 1
+      header: "Index",
+      id: "index",
+      cell: ({ row }) => row.index + 1,
     },
     {
       header: "Language",
@@ -187,7 +187,9 @@ const LanguageTable = () => {
                     id="databaseLocation"
                     name="databaseLocation"
                     value={selectedDatabaseLocation}
-                    onChange={(e) => setSelectedDatabaseLocation(e.target.value)}
+                    onChange={(e) =>
+                      setSelectedDatabaseLocation(e.target.value)
+                    }
                   >
                     <option value="indonesia">Indonesia</option>
                     <option value="english">English</option>

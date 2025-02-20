@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getUsers } from "../../../../firebase/userService";
-import BaseTable from './BaseTable';
+import BaseTable from "./BaseTable";
+import { useUsers } from "../../../../context/UserContext";
 
 const UserTable = () => {
-  const [users, setUsers] = useState([]);
+  const { users, setUsers } = useUsers();
 
   const fetchUsers = async () => {
     const data = await getUsers();
@@ -12,7 +13,7 @@ const UserTable = () => {
 
   useEffect(() => {
     fetchUsers();
-  })
+  });
 
   const userTableDefinition = [
     {
@@ -38,8 +39,7 @@ const UserTable = () => {
     <>
       <BaseTable data={users} columns={userTableDefinition} />
     </>
-  )
-  
+  );
 };
 
 export default UserTable;

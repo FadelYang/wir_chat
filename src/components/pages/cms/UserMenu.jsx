@@ -1,6 +1,7 @@
 import React from 'react'
 import HeaderMenu from '../../organism/cms/HeaderMenu';
 import DashboardTemplate from '../../templates/cms/DashboardTemplate';
+import UserTable from '../../organism/cms/datatables/UserTable';
 
 const UserMenu = () => {
   const breadcrumbPath = [
@@ -11,6 +12,9 @@ const UserMenu = () => {
   return (
     <DashboardTemplate>
       <HeaderMenu name={'Users'} breadcrumbPath={breadcrumbPath}/>
+      <div className="mt-5">
+        <UserTable />
+      </div>
     </DashboardTemplate>
   )
 }

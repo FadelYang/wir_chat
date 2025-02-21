@@ -1,6 +1,12 @@
-import { collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 import { auth, db } from "./firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  EmailAuthProvider,
+  createUserWithEmailAndPassword,
+  reauthenticateWithCredential,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
 
 export const getUsers = async () => {
   try {
@@ -19,18 +25,26 @@ export const getUsers = async () => {
   }
 };
 
-export const createUser = async (email, password) => {
+export const registerUser = async (email, password, role, adminPassword) => {
   try {
-    const createdUser = await createUserWithEmailAndPassword(
-      auth,
+    const currentAdmin = auth.currentUser;
+    if (!currentAdmin) throw new Error("Admin not logged in");
+
+    const credential = EmailAuthProvider.credential(currentAdmin.email, adminPassword);
+    await reauthenticateWithCredential(currentAdmin, credential);
+
+    const createdUser = await createUserWithEmailAndPassword(auth, email, password);
+
+    await addDoc(collection(db, "users"), {
       email,
-      password
-    );
-    return createdUser;
+      role,
+      uid: createdUser.user.uid,
+      createdAt: new Date(),
+    });
+
+    return createdUser.user;
   } catch (error) {
-    console.log("Failed create a new user", error.message);
-    throw new Error(
-      "Failed to connect to the database. Please try again later"
-    );
+    console.error("Error registering user:", error.message);
+    throw new Error(error.message || "User creation failed.");
   }
 };

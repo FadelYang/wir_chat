@@ -3,19 +3,24 @@ import HeaderMenu from "../../organism/cms/HeaderMenu";
 import DashboardTemplate from "../../templates/cms/DashboardTemplate";
 import UserTable from "../../organism/cms/datatables/UserTable";
 import BaseModal from "../../molecules/BaseModal";
-import { createUser } from "../../../firebase/userService";
+import { db } from "../../../firebase/firebase";
+import { registerUser } from "../../../firebase/userService";
 import { useUsers } from "../../../context/UserContext";
+import { collection, onSnapshot } from "firebase/firestore";
 
 const UserMenu = () => {
   const [isCreateUserModalOpen, setIsCreateUserModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCheckPasswordPass, setIsCheckPasswordPass] = useState(true);
-  const { addUser } = useUsers();
+  const [isAdminConfirmationModalOpen, setIsAdminConfirmationModalOpen] =
+    useState(false);
+  const { addUser, setUsers } = useUsers();
   const [formData, setFormData] = useState({
     email: "",
-    role: "",
+    role: "superadmin",
     password: "",
     checkPassword: "",
+    adminPassword: ""
   });
   const breadcrumbPath = [
     { name: "Dashboard", path: "/dashboard" },
@@ -32,45 +37,83 @@ const UserMenu = () => {
 
   useEffect(() => {
     setIsCheckPasswordPass(formData.password === formData.checkPassword);
-  }, [formData.password, formData.checkPassword])
+  }, [formData.password, formData.checkPassword]);
 
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
+      const usersData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setUsers(usersData);
+    });
 
-    if (!formData.email || !formData.password || !formData.checkPassword) {
-      alert("Please fill in all required fielnds");
+    return () => unsubscribe();
+  }, []);
+
+  const handleFormSubmit = async () => {
+    console.log({
+      "submitted data": formData
+    });
+
+    if (
+      !formData.email ||
+      !formData.password ||
+      !formData.checkPassword ||
+      !formData.role ||
+      !formData.adminPassword
+    ) {
+      alert("Please fill in all required fields");
+      return;
+    }
+
+    if (!formData.adminPassword) {
+      alert("Please enter your admin password");
       return;
     }
 
     const isConfirm = window.confirm(
       "Are you sure? Please check the input again before submitting"
     );
-
     if (!isConfirm) return;
 
+    setIsSubmitting(true);
+
     try {
-      setIsSubmitting(true);
+      const response = await registerUser(
+        formData.email,
+        formData.password,
+        formData.role,
+        formData.adminPassword
+      );
 
-      const createUserFormData = new FormData();
-      createUserFormData.append("email", formData.email);
-      createUserFormData.append("password", formData.password);
-
-      const response = await createUser(email, password);
-
-      if ((!response, ok)) {
-        throw new Error(`error ${response.status}, failed create a new user`);
+      if (!response) {
+        throw new Error("Failed to create a new user");
       }
 
-      alert("Success, create a new user");
+      alert("Success! User created.");
+      addUser({ email: formData.email, role: formData.role });
 
       setFormData({
         email: "",
         password: "",
         checkPassword: "",
+        adminPassword: "",
       });
+
       setIsCreateUserModalOpen(false);
-      addUser({ email: formData.email, role: formData.role });
-    } catch (error) {}
+    } catch (error) {
+      alert("Failed to add new user: " + error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleAdminConfirm = async (event) => {
+    event.preventDefault();
+
+    await handleFormSubmit();
+    setIsAdminConfirmationModalOpen(false);
   };
 
   return (
@@ -80,7 +123,16 @@ const UserMenu = () => {
         <div className="flex justify-end">
           <button
             className="px-4 py-2 text-sm text-white bg-gray-900 rounded hover:bg-gray-950"
-            onClick={() => setIsCreateUserModalOpen(true)}
+            onClick={() => {
+              setIsCreateUserModalOpen(true);
+              setFormData({
+                email: "",
+                password: "",
+                checkPassword: "",
+                adminPassword: "",
+                role: "superadmin"
+              });
+            }}
           >
             Create new user
           </button>
@@ -99,7 +151,14 @@ const UserMenu = () => {
                 <i className="fa-solid fa-xmark"></i>
               </button>
             </div>
-            <form onSubmit={handleFormSubmit} encType="multipart/form-data">
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                setIsAdminConfirmationModalOpen(true);
+                setIsCreateUserModalOpen(false);
+              }}
+              encType="multipart/form-data"
+            >
               <div className="mb-4">
                 <label
                   className="block mb-2 text-sm font-bold text-gray-700"
@@ -154,7 +213,9 @@ const UserMenu = () => {
                   required
                 />
                 {!isCheckPasswordPass && (
-                  <p className='mt-1 text-red-500 text-xs'>Password not match</p>
+                  <p className="mt-1 text-red-500 text-xs">
+                    Password not match
+                  </p>
                 )}
               </div>
               <div className="mb-4">
@@ -171,6 +232,7 @@ const UserMenu = () => {
                     name="role"
                     value={formData.role}
                     onChange={handleFormChange}
+                    defaultValue="superadmin"
                   >
                     <option value="superadmin">Superadmin</option>
                     <option value="admin">Admin</option>
@@ -185,6 +247,52 @@ const UserMenu = () => {
                     </svg>
                   </div>
                 </div>
+              </div>
+              <div className="flex items-center justify-end">
+                <button
+                  className="px-4 py-2 text-sm font-bold text-white bg-gray-900 rounded hover:bg-gray-950 focus:outline-none focus:shadow-outline disabled:bg-gray-500"
+                  type="submit"
+                >
+                  Add new user
+                </button>
+              </div>
+            </form>
+          </div>
+        </BaseModal>
+      )}
+
+      {isAdminConfirmationModalOpen && (
+        <BaseModal>
+          <div>
+            <div className="flex justify-between mb-5 font-bold text-md">
+              <h1>Credential check</h1>
+              <button
+                onClick={() => {
+                  setIsAdminConfirmationModalOpen(false);
+                  setIsCreateUserModalOpen(true);
+                }}
+              >
+                <i className="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+            <form onSubmit={handleAdminConfirm} encType="multipart/form-data">
+              <div className="mb-4">
+                <label
+                  className="block mb-2 text-sm font-bold text-gray-700"
+                  htmlFor="adminPassword"
+                >
+                  Password
+                </label>
+                <input
+                  className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                  id="adminPassword"
+                  name="adminPassword"
+                  value={formData.adminPassword}
+                  onChange={handleFormChange}
+                  type="password"
+                  placeholder="Enter your account password"
+                  required
+                />
               </div>
               <div className="flex items-center justify-end">
                 <button

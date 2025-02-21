@@ -4,7 +4,7 @@ import BaseTable from "./BaseTable";
 import { useUsers } from "../../../../context/UserContext";
 
 const UserTable = () => {
-  const { users, setUsers } = useUsers();
+  const {users, setUsers} = useUsers();
 
   const fetchUsers = async () => {
     const data = await getUsers();

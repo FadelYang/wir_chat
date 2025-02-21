@@ -47,7 +47,6 @@ const CollectionTable = () => {
   const existingLanguages = ["indonesia", "english", "china", "japan"];
 
   const getAllCollections = async () => {
-    console.log({ isDeleting });
     const allCollections = [];
 
     for (let language of existingLanguages) {
@@ -85,10 +84,6 @@ const CollectionTable = () => {
       const response = await fetch(deleteCollectionUrl, {
         method: "POST",
         body: requestData,
-      });
-
-      console.log({
-        language, collectionName
       });
 
       removeCollection(language, collectionName);

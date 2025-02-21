@@ -35,13 +35,11 @@ const Login = () => {
         navigate("/dashboard");
         setError(false);
         setUser({ ...user, role: userDocSnapData.role });
-        console.log({ user });
       } else {
         throw new Error("User data not found in Firestore");
       }
       setIsLoading(false);
     } catch (error) {
-      console.log({ error });
       const errorMessage = error.message;
       setError(true);
       if (errorMessage == "Firebase: Error (auth/too-many-requests).") {

@@ -82,7 +82,7 @@ const UserMenu = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await registerUser(
+      await registerUser(
         formData.email,
         formData.password,
         formData.role,

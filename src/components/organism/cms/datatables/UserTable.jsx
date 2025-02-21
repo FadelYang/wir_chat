@@ -13,7 +13,7 @@ const UserTable = () => {
 
   useEffect(() => {
     fetchUsers();
-  });
+  }, []);
 
   const userTableDefinition = [
     {

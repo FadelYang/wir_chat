@@ -42,7 +42,10 @@ export const registerUser = async (email, password, role, adminPassword) => {
       createdAt: new Date(),
     });
 
-    return createdUser.user;
+    await signOut(auth);
+
+    await signInWithEmailAndPassword(auth, currentAdmin.email, adminPassword);
+    window.location.href = "/dashboard/users"
   } catch (error) {
     console.error("Error registering user:", error.message);
     throw new Error(error.message || "User creation failed.");

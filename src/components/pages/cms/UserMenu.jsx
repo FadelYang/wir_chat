@@ -7,8 +7,10 @@ import { db } from "../../../firebase/firebase";
 import { registerUser } from "../../../firebase/userService";
 import { useUsers } from "../../../context/UserContext";
 import { collection, onSnapshot } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 const UserMenu = () => {
+  const navigate = useNavigate();
   const [isCreateUserModalOpen, setIsCreateUserModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCheckPasswordPass, setIsCheckPasswordPass] = useState(true);
@@ -20,7 +22,7 @@ const UserMenu = () => {
     role: "superadmin",
     password: "",
     checkPassword: "",
-    adminPassword: ""
+    adminPassword: "",
   });
   const breadcrumbPath = [
     { name: "Dashboard", path: "/dashboard" },
@@ -53,7 +55,7 @@ const UserMenu = () => {
 
   const handleFormSubmit = async () => {
     console.log({
-      "submitted data": formData
+      "submitted data": formData,
     });
 
     if (
@@ -86,10 +88,6 @@ const UserMenu = () => {
         formData.role,
         formData.adminPassword
       );
-
-      if (!response) {
-        throw new Error("Failed to create a new user");
-      }
 
       alert("Success! User created.");
       addUser({ email: formData.email, role: formData.role });
@@ -130,7 +128,7 @@ const UserMenu = () => {
                 password: "",
                 checkPassword: "",
                 adminPassword: "",
-                role: "superadmin"
+                role: "superadmin",
               });
             }}
           >

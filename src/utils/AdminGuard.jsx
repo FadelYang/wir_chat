@@ -12,8 +12,8 @@ export const AdminGuard = ({ children }) => {
       navigate("/login");
     }
 
-    if (user && user.role !== "admin" && !alertShown.current) {
-      alert("You do not have permission to access this page");
+    if (user && user.role !== "superadmin" && !alertShown.current) {
+      // alert("You do not have permission to access this page");
       alertShown.current = true;
       navigate("/dashboard");
     }
@@ -21,5 +21,5 @@ export const AdminGuard = ({ children }) => {
 
   if (loading) return <p>Loading...</p>;
 
-  return user?.role === "admin" ? children : null;
+  return user?.role === "superadmin" ? children : null;
 };

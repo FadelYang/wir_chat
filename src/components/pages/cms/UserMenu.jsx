@@ -144,7 +144,7 @@ const UserMenu = () => {
         <BaseModal>
           <div>
             <div className="flex justify-between mb-5 font-bold text-md">
-              <h1>Add new collection</h1>
+              <h1>Add new user</h1>
               <button onClick={() => setIsCreateUserModalOpen(false)}>
                 <i className="fa-solid fa-xmark"></i>
               </button>

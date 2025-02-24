@@ -1,13 +1,32 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { auth } from "../../firebase/firebase";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { getUserByEmail } from "../../firebase/userService";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSendResetEmailSuccess, setIsSendResetEmailSuccess] = useState(true);
 
-  const onForgetPassword = () => {
+  const onForgetPassword = async (event) => {
+    event.preventDefault();
 
-  }
+    try {
+      setIsLoading(true);
+      const user = await getUserByEmail(email);
+      if (user == false) {
+        setIsSendResetEmailSuccess(false);
+        return;
+      }
+      await sendPasswordResetEmail(auth, email);
+      alert(`Success send reset password email to ${email}`);
+    } catch (error) {
+      alert("Failed to send password reset email. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -16,7 +35,9 @@ const ForgotPassword = () => {
           className="flex flex-col gap-5 border rounded py-5 px-10 shadow max-w-[356px]"
           onSubmit={onForgetPassword}
         >
-          <div className="text-center text-xl font-medium">Recovery password form</div>
+          <div className="text-center text-xl font-medium">
+            Recovery password form
+          </div>
           <div className="flex flex-col gap-2">
             <label
               className="block text-sm font-bold text-gray-700"
@@ -33,8 +54,13 @@ const ForgotPassword = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            <p className='text-xs text-gray-500'>Make sure you type right email, we will send recovery password link to your email</p>
-
+            {!isSendResetEmailSuccess && (
+              <p className="text-xs text-red-500">{`User with email ${email} not found`}</p>
+            )}
+            <p className="text-xs text-gray-500">
+              Make sure you type right email, we will send recovery password
+              link to your email
+            </p>
           </div>
           <div className="flex flex-col gap-2">
             <button

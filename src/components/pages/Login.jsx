@@ -23,6 +23,8 @@ const Login = () => {
         email,
         password
       );
+
+      console.log({userCredential});
       // Signed in
       const userData = userCredential.user;
 
@@ -40,6 +42,7 @@ const Login = () => {
       }
       setIsLoading(false);
     } catch (error) {
+      console.log({error});
       const errorMessage = error.message;
       setError(true);
       if (errorMessage == "Firebase: Error (auth/too-many-requests).") {

@@ -4,9 +4,11 @@ import MainFullLogo from "../../atoms/MainFullLogo";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../firebase/firebase";
 import gearIcon from "/gear-solid.svg";
+import { getLoggedUserRole } from "../../../firebase/userService";
 
 const DashboardTemplate = ({ children }) => {
   const [isProfilDropdownOpen, setIsProfilDropdownOpen] = useState(false);
+  const [currentUserRole, setCurrentUserRole] = useState("");
   const [openSidebarMenu, setOpenSidebarMenu] = useState(() => {
     return (
       JSON.parse(localStorage.getItem("openSidebarMenu")) || ["dashboardMenu"]
@@ -15,6 +17,21 @@ const DashboardTemplate = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [selectedRoute, setSelectedRoute] = useState("");
+
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      try {
+        const loggedUserRole = await getLoggedUserRole();
+        setCurrentUserRole(loggedUserRole);
+      } catch (error) {
+        console.error("Error fetching user role:", error);
+      }
+    };
+
+    fetchUserRole();
+  }, []);
+
+  console.log({ currentUserRole });
 
   const navigate = useNavigate();
 
@@ -177,43 +194,46 @@ const DashboardTemplate = ({ children }) => {
               </ul>
             </div>
           </nav>
-          <nav className="">
-            <button
-              className="text-white bg-[#333A48] w-full py-2 rounded flex justify-between px-5 items-center"
-              onClick={() => handleShowSidebarMenu("userManagementMenu")}
-            >
-              <span>Users Management</span>
-              <i
-                className={`fa-solid fa-chevron-up transition-transform duration-200 ${
-                  openSidebarMenu.indexOf("userManagementMenu") !== -1
-                    ? "rotate-180"
-                    : "rotate-0"
-                }`}
-              />
-            </button>
-            <div>
-              <ul
-                className={`mt-2 ps-0 space-y-1 transition-all duration-200 list-none ${
-                  openSidebarMenu.indexOf("userManagementMenu") !== -1
-                    ? "max-h-48"
-                    : "max-h-0 overflow-hidden"
-                }`}
-              >
-                <li className="w-full">
-                  <Link
-                    to={`/dashboard/users`}
-                    className={`block px-4 py-2 ${
-                      selectedRoute === "/dashboard/users"
-                        ? "text-black"
-                        : "text-gray-700"
-                    } transition-colors rounded hover:bg-gray-200`}
+          {currentUserRole ===
+            "superadmin" && (
+              <nav className="">
+                <button
+                  className="text-white bg-[#333A48] w-full py-2 rounded flex justify-between px-5 items-center"
+                  onClick={() => handleShowSidebarMenu("userManagementMenu")}
+                >
+                  <span>Users Management</span>
+                  <i
+                    className={`fa-solid fa-chevron-up transition-transform duration-200 ${
+                      openSidebarMenu.indexOf("userManagementMenu") !== -1
+                        ? "rotate-180"
+                        : "rotate-0"
+                    }`}
+                  />
+                </button>
+                <div>
+                  <ul
+                    className={`mt-2 ps-0 space-y-1 transition-all duration-200 list-none ${
+                      openSidebarMenu.indexOf("userManagementMenu") !== -1
+                        ? "max-h-48"
+                        : "max-h-0 overflow-hidden"
+                    }`}
                   >
-                    Users
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </nav>
+                    <li className="w-full">
+                      <Link
+                        to={`/dashboard/users`}
+                        className={`block px-4 py-2 ${
+                          selectedRoute === "/dashboard/users"
+                            ? "text-black"
+                            : "text-gray-700"
+                        } transition-colors rounded hover:bg-gray-200`}
+                      >
+                        Users
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </nav>
+            )}
         </div>
       </div>
 

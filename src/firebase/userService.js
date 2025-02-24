@@ -1,4 +1,4 @@
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { auth, db } from "./firebase";
 import {
   EmailAuthProvider,
@@ -30,6 +30,14 @@ export const getUserByEmail = async (email) => {
   const userWithEmail = users.map(item => item.email);
   const isUserExists = userWithEmail.includes(email);
   return isUserExists
+}
+
+export const getLoggedUserRole = async () => {
+  const loggedUser = auth.currentUser;
+  const loggedUserUid = loggedUser.uid;
+  const loggedUserData = (await getDoc(doc(db, "users", loggedUserUid))).data();
+
+  return loggedUserData.role
 }
 
 export const registerUser = async (email, password, role, adminPassword) => {

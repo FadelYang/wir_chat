@@ -1,11 +1,31 @@
-# React + Vite
+# WIR Chat
+A ChatGPT-like website that you can use to learn more about WIR Group. This repository contain their frontend source code
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# How to Install
+## System Requirement
+- node v18.18.0
+- npm v9.8.1
+## Installation Step
+- clone or download this repository
+- run `npm run install` to install all package needs
+- run `npm run dev` to run the app locally
+- all firebase service or function to communicate with firebase are store in `/src/firebase`
 
-Currently, two official plugins are available:
+# How to Contribute
+## Knowledge Requirement
+Before contribute to this project, you need to know about these tools:
+- HTML
+- CSS
+- TailwindCSS
+- JavaScript
+- Firebase
+- React 18 or higher
+- react-router-dom
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Project Structure
+- this project follows **atomic design** guideline to structure the folder, especially the components folder. You can read about **atomic design** [here](https://medium.com/galaxy-ux-studio/principles-of-atomic-design-7b03a30c3cb6)
+- make sure you know how to manage state in React, some state manage with useContext API
+- datatable in this project are build with tanstack react-table
 
 # Versioning
 ## Version 1.0.0

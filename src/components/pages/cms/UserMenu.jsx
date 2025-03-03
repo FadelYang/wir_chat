@@ -54,10 +54,6 @@ const UserMenu = () => {
   }, []);
 
   const handleFormSubmit = async () => {
-    console.log({
-      "submitted data": formData,
-    });
-
     if (
       !formData.email ||
       !formData.password ||

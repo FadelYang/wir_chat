@@ -19,7 +19,6 @@ export function AuthProvider({ children }) {
       if (firebaseUser) {
         const userDocRef = doc(db, "users", firebaseUser.uid);
         const userDocSnap = await getDoc(userDocRef);
-        console.log({firebaseUser});
 
         if (userDocSnap.exists()) {
           const userDocSnapData = userDocSnap.data();

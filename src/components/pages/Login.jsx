@@ -24,7 +24,6 @@ const Login = () => {
         password
       );
 
-      console.log({userCredential});
       // Signed in
       const userData = userCredential.user;
 

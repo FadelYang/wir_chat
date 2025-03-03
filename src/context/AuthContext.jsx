@@ -19,10 +19,11 @@ export function AuthProvider({ children }) {
       if (firebaseUser) {
         const userDocRef = doc(db, "users", firebaseUser.uid);
         const userDocSnap = await getDoc(userDocRef);
+        console.log({firebaseUser});
 
         if (userDocSnap.exists()) {
           const userDocSnapData = userDocSnap.data();
-          const userData = { ...firebaseUser, role: userDocSnapData.role };
+          const userData = { ...firebaseUser, role: userDocSnapData.role, email: userDocSnapData.email };
           setUser(userData);
         } else {
           setUser(firebaseUser); // At least set basic user data

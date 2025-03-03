@@ -32,8 +32,6 @@ const DashboardTemplate = ({ children }) => {
     fetchUserRole();
   }, []);
 
-  console.log({ currentUserRole });
-
   const navigate = useNavigate();
 
   const handleLogout = () => {

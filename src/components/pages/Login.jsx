@@ -35,7 +35,7 @@ const Login = () => {
         const userDocSnapData = userDocSnap.data();
         navigate("/dashboard");
         setError(false);
-        setUser({ ...user, role: userDocSnapData.role });
+        setUser({ ...user, role: userDocSnapData.role, email: userDocSnap.email });
       } else {
         throw new Error("User data not found in Firestore");
       }

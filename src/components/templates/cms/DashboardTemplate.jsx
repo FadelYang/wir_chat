@@ -5,10 +5,11 @@ import { signOut } from "firebase/auth";
 import { auth } from "../../../firebase/firebase";
 import gearIcon from "/gear-solid.svg";
 import { getLoggedUserRole } from "../../../firebase/userService";
+import { useAuth } from "../../../context/AuthContext";
 
 const DashboardTemplate = ({ children }) => {
   const [isProfilDropdownOpen, setIsProfilDropdownOpen] = useState(false);
-  const [currentUserRole, setCurrentUserRole] = useState("");
+  const { currentUserRole, setCurrentUserRole } = useAuth();
   const [openSidebarMenu, setOpenSidebarMenu] = useState(() => {
     return (
       JSON.parse(localStorage.getItem("openSidebarMenu")) || ["dashboardMenu"]
@@ -194,46 +195,45 @@ const DashboardTemplate = ({ children }) => {
               </ul>
             </div>
           </nav>
-          {currentUserRole ===
-            "superadmin" && (
-              <nav className="">
-                <button
-                  className="text-white bg-[#333A48] w-full py-2 rounded flex justify-between px-5 items-center"
-                  onClick={() => handleShowSidebarMenu("userManagementMenu")}
+          {currentUserRole === "superadmin" && (
+            <nav className="">
+              <button
+                className="text-white bg-[#333A48] w-full py-2 rounded flex justify-between px-5 items-center"
+                onClick={() => handleShowSidebarMenu("userManagementMenu")}
+              >
+                <span>Users Management</span>
+                <i
+                  className={`fa-solid fa-chevron-up transition-transform duration-200 ${
+                    openSidebarMenu.indexOf("userManagementMenu") !== -1
+                      ? "rotate-180"
+                      : "rotate-0"
+                  }`}
+                />
+              </button>
+              <div>
+                <ul
+                  className={`mt-2 ps-0 space-y-1 transition-all duration-200 list-none ${
+                    openSidebarMenu.indexOf("userManagementMenu") !== -1
+                      ? "max-h-48"
+                      : "max-h-0 overflow-hidden"
+                  }`}
                 >
-                  <span>Users Management</span>
-                  <i
-                    className={`fa-solid fa-chevron-up transition-transform duration-200 ${
-                      openSidebarMenu.indexOf("userManagementMenu") !== -1
-                        ? "rotate-180"
-                        : "rotate-0"
-                    }`}
-                  />
-                </button>
-                <div>
-                  <ul
-                    className={`mt-2 ps-0 space-y-1 transition-all duration-200 list-none ${
-                      openSidebarMenu.indexOf("userManagementMenu") !== -1
-                        ? "max-h-48"
-                        : "max-h-0 overflow-hidden"
-                    }`}
-                  >
-                    <li className="w-full">
-                      <Link
-                        to={`/dashboard/users`}
-                        className={`block px-4 py-2 ${
-                          selectedRoute === "/dashboard/users"
-                            ? "text-black"
-                            : "text-gray-700"
-                        } transition-colors rounded hover:bg-gray-200`}
-                      >
-                        Users
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-              </nav>
-            )}
+                  <li className="w-full">
+                    <Link
+                      to={`/dashboard/users`}
+                      className={`block px-4 py-2 ${
+                        selectedRoute === "/dashboard/users"
+                          ? "text-black"
+                          : "text-gray-700"
+                      } transition-colors rounded hover:bg-gray-200`}
+                    >
+                      Users
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </nav>
+          )}
         </div>
       </div>
 

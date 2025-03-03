@@ -11,6 +11,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [currentUserRole, setCurrentUserRole] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,7 +37,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading }}>
+    <AuthContext.Provider value={{ user, setUser, loading, currentUserRole, setCurrentUserRole }}>
       {!loading ? children : <p>Loading...</p>} {/* Prevent showing app until auth is ready */}
     </AuthContext.Provider>
   );

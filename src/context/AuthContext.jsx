@@ -22,7 +22,11 @@ export function AuthProvider({ children }) {
 
         if (userDocSnap.exists()) {
           const userDocSnapData = userDocSnap.data();
-          const userData = { ...firebaseUser, role: userDocSnapData.role, email: userDocSnapData.email };
+          const userData = {
+            ...firebaseUser,
+            role: userDocSnapData.role,
+            email: firebaseUser.email || userDocSnapData.email,
+          };
           setUser(userData);
         } else {
           setUser(firebaseUser); // At least set basic user data
@@ -34,11 +38,14 @@ export function AuthProvider({ children }) {
     });
 
     return () => unsubscribe();
-  }, [user]);
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, currentUserRole, setCurrentUserRole }}>
-      {!loading ? children : <p>Loading...</p>} {/* Prevent showing app until auth is ready */}
+    <AuthContext.Provider
+      value={{ user, setUser, loading, currentUserRole, setCurrentUserRole }}
+    >
+      {!loading ? children : <p>Loading...</p>}{" "}
+      {/* Prevent showing app until auth is ready */}
     </AuthContext.Provider>
   );
 }

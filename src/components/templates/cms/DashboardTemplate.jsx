@@ -18,6 +18,7 @@ const DashboardTemplate = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [selectedRoute, setSelectedRoute] = useState("");
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchUserRole = async () => {
@@ -269,6 +270,11 @@ const DashboardTemplate = ({ children }) => {
             {isProfilDropdownOpen && (
               <div className="absolute right-0 w-48 mt-2 bg-white border rounded shadow-lg">
                 <ul className="py-1 list-none ps-0">
+                <li
+                    className="block px-4 py-2 text-gray-700 transition-colors hover:bg-gray-200 hover:cursor-pointer"
+                  >
+                    <Link to={`/dashboard/users/${user.uid}`}>Profil</Link>
+                  </li>
                   <li
                     className="block px-4 py-2 text-gray-700 transition-colors hover:bg-gray-200 hover:cursor-pointer"
                     onClick={() => handleLogout()}

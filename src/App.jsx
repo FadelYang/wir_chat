@@ -12,7 +12,9 @@ import { AdminGuard } from "./utils/AdminGuard";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 import NotFound from "./components/pages/NotFound";
-import ForgotPassword from './components/pages/ForgotPassword';
+import ForgotPassword from "./components/pages/ForgotPassword";
+import UserProfile from "./components/pages/cms/UserProfile";
+import { MeGuard } from "./utils/MeGuard";
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -56,6 +58,14 @@ function App() {
           <AdminGuard>
             <UserMenu />
           </AdminGuard>
+        }
+      />
+      <Route
+        path="/dashboard/users/:uid"
+        element={
+          <MeGuard>
+            <UserProfile />
+          </MeGuard>
         }
       />
       {/* <Route

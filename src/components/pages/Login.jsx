@@ -40,6 +40,7 @@ const Login = () => {
       }
       setIsLoading(false);
       navigate("/dashboard");
+      window.location.reload();
     } catch (error) {
       console.log({error});
       const errorMessage = error.message;

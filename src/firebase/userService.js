@@ -1,5 +1,6 @@
 import {
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -32,11 +33,11 @@ export const getUsers = async () => {
   }
 };
 
-export const changeActiveStatus = async (docuemntId, isActiveStatus, customMessage) => {
+export const changeActiveStatus = async (userId, isActiveStatus) => {
   try {
     const changeStatus = !isActiveStatus;
 
-    const userRef = doc(db, "users", docuemntId);
+    const userRef = doc(db, "users", userId);
     await updateDoc(userRef, {
       is_active: changeStatus,
     });
@@ -45,6 +46,16 @@ export const changeActiveStatus = async (docuemntId, isActiveStatus, customMessa
     throw new Error("Failed to change user acttive status" + error.message);
   }
 };
+
+export const deleteUser = async (userId) => {
+  try {
+    const userRef = doc(db, "users", userId);
+    await deleteDoc(userRef);
+  } catch (error) {
+    console.error("Error delete user", error.message);
+    throw new Error("Failed to delete user" + error.message)
+  }
+}
 
 export const getUserByEmail = async (email) => {
   const users = await getUsers();

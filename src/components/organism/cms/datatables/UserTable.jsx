@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { changeActiveStatus, getUsers } from "../../../../firebase/userService";
+import {
+  changeActiveStatus,
+  deleteUser,
+  getUsers,
+} from "../../../../firebase/userService";
 import BaseTable from "./BaseTable";
 import { useUsers } from "../../../../context/UserContext";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
@@ -23,12 +27,12 @@ const UserTable = () => {
     try {
       const updateUrl = `${
         process.env.REACT_APP_BACKEND_URL
-      }/update-user/${userEmail}/${!isActiveStatus}`;
+      }/update-user/${userEmail}?disabled=${isActiveStatus}`;
       const response = await fetch(updateUrl, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        // headers: {
+        //   "Content-Type": "application/json",
+        // },
       });
 
       if (!response.ok) {
@@ -54,6 +58,39 @@ const UserTable = () => {
 
       setIsLoading(false);
       setSelectedRow("false");
+    }
+  };
+
+  const handleDeleteUser = async (userId) => {
+    const isConfirm = confirm("Are you sure?");
+    if (!isConfirm) return;
+    setIsLoading(true);
+    setSelectedRow(userId);
+
+    try {
+      const deleteUrl = `${process.env.REACT_APP_BACKEND_URL}/delete-user/${userId}`;
+      const response = await fetch(deleteUrl, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete user");
+      }
+
+      alert("User deleted successfully!");
+
+      await deleteUser(userId);
+
+      setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
+
+      setIsLoading(true);
+      setSelectedRow(userId);
+    } catch (error) {
+      alert(error);
+      console.error(error);
+
+      setIsLoading(true);
+      setSelectedRow(userId);
     }
   };
 
@@ -107,9 +144,12 @@ const UserTable = () => {
             className={"bg-white z-10 py-2 px-4 rounded flex flex-col gap-2"}
           >
             <MenuItem>
-              <a className="block data-[focus]:bg-blue-100" href="/settings">
+              <button
+                className="block data-[focus]:bg-blue-100"
+                onClick={() => handleDeleteUser(row.original.id)}
+              >
                 Delete
-              </a>
+              </button>
             </MenuItem>
             <MenuItem>
               <button
@@ -122,7 +162,7 @@ const UserTable = () => {
                   )
                 }
               >
-                Disable
+                {row.original.is_active ? 'Disable' : 'Enable'}
               </button>
             </MenuItem>
           </MenuItems>

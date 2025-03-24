@@ -55,6 +55,7 @@ export const registerUser = async (email, password, role, adminPassword) => {
       email,
       role,
       createdAt: new Date(),
+      is_active: true
     });
 
     await signOut(auth);

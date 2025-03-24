@@ -49,7 +49,10 @@ const Login = () => {
         setErrorMessage(
           "Terlalu banyak percobaan, silahkan coba lagi beberapa saat"
         );
-      } else {
+      } else if (errorMessage == "Firebase: Error (auth/user-disabled).") {
+        setErrorMessage("Akun in dalam keadaan tidak aktif atau disable")
+      } 
+      else {
         setErrorMessage("Email atau password salah");
       }
       setIsLoading(false);

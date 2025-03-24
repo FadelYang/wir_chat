@@ -7,15 +7,18 @@ import {
 import BaseTable from "./BaseTable";
 import { useUsers } from "../../../../context/UserContext";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { useAuth } from '../../../../context/AuthContext';
 
 const UserTable = () => {
   const { users, setUsers } = useUsers();
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedRow, setSelectedRow] = useState("");
 
   const fetchUsers = async () => {
     const data = await getUsers();
-    setUsers(data);
+    const  fileteredData = data.filter(data => data.email !== user.email)
+    setUsers(fileteredData);
   };
 
   const changeUserActiveStatus = async (userEmail, userId, isActiveStatus) => {
@@ -30,9 +33,6 @@ const UserTable = () => {
       }/update-user/${userEmail}?disabled=${isActiveStatus}`;
       const response = await fetch(updateUrl, {
         method: "PUT",
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
       });
 
       if (!response.ok) {
@@ -141,7 +141,7 @@ const UserTable = () => {
           </MenuButton>
           <MenuItems
             anchor="bottom"
-            className={"bg-white z-10 py-2 px-4 rounded flex flex-col gap-2"}
+            className={"bg-white shadow py-2 px-4 rounded flex flex-col gap-2"}
           >
             <MenuItem>
               <button

@@ -98,16 +98,20 @@ const UserMenu = () => {
       setIsCreateUserModalOpen(false);
     } catch (error) {
       alert("Failed to add new user: " + error.message);
+      setIsSubmitting(false);
     } finally {
       setIsSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   const handleAdminConfirm = async (event) => {
+    setIsSubmitting(true);
     event.preventDefault();
 
     await handleFormSubmit();
     setIsAdminConfirmationModalOpen(false);
+    setIsSubmitting(false);
   };
 
   return (
@@ -132,7 +136,7 @@ const UserMenu = () => {
           </button>
         </div>
         <div className="mt-5">
-          <UserTable />
+          <UserTable isSubmitting={isSubmitting}/>
         </div>
       </div>
 

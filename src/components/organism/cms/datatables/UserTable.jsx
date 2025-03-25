@@ -9,7 +9,8 @@ import { useUsers } from "../../../../context/UserContext";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { useAuth } from '../../../../context/AuthContext';
 
-const UserTable = () => {
+const UserTable = (props) => {
+  const { isSubmitting } = props
   const { users, setUsers } = useUsers();
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
@@ -17,7 +18,7 @@ const UserTable = () => {
 
   const fetchUsers = async () => {
     const data = await getUsers();
-    const  fileteredData = data.filter(data => data.email !== user.email)
+    const fileteredData = data.filter(data => data.email !== user.email)
     setUsers(fileteredData);
   };
 
@@ -26,6 +27,11 @@ const UserTable = () => {
     if (!isConfirm) return;
     setIsLoading(true);
     setSelectedRow(userId);
+
+    if (userId === user.uid) {
+      alert(`You can't disable your own account`);
+      return;
+    }
 
     try {
       const updateUrl = `${
@@ -48,7 +54,7 @@ const UserTable = () => {
         }`
       );
       setIsLoading(false);
-      setSelectedRow("false");
+      setSelectedRow("");
     } catch (error) {
       console.error("Error updating user:", error.message);
 
@@ -57,7 +63,7 @@ const UserTable = () => {
       alert("Failed to change user active status. Changes reverted.");
 
       setIsLoading(false);
-      setSelectedRow("false");
+      setSelectedRow("");
     }
   };
 
@@ -66,6 +72,11 @@ const UserTable = () => {
     if (!isConfirm) return;
     setIsLoading(true);
     setSelectedRow(userId);
+
+    if (userId === user.uid) {
+      alert(`You can't delete your own account`);
+      return;
+    }
 
     try {
       const deleteUrl = `${process.env.REACT_APP_BACKEND_URL}/delete-user/${userId}`;
@@ -83,20 +94,20 @@ const UserTable = () => {
 
       setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
 
-      setIsLoading(true);
-      setSelectedRow(userId);
+      setIsLoading(false);
+      setSelectedRow("");
     } catch (error) {
       alert(error);
       console.error(error);
 
-      setIsLoading(true);
-      setSelectedRow(userId);
+      setIsLoading(false);
+      setSelectedRow("");
     }
   };
 
   useEffect(() => {
     fetchUsers();
-  }, [isLoading]);
+  }, [isLoading, isSubmitting]);
 
   const userTableDefinition = [
     {

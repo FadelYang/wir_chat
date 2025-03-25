@@ -33,6 +33,18 @@ export const getUsers = async () => {
   }
 };
 
+export const updateUserRole = async (userId, selectedRole) => {
+  try {
+    const userRef = doc(db, "users", userId);
+    await updateDoc(userRef, {
+      role: selectedRole
+    });
+  } catch (error) {
+    console.error("Failed to change user role" + error.message);
+    throw new Error("Failed to change user role" + error.message);
+  }
+}
+
 export const changeActiveStatus = async (userId, isActiveStatus) => {
   try {
     const changeStatus = !isActiveStatus;
@@ -43,7 +55,7 @@ export const changeActiveStatus = async (userId, isActiveStatus) => {
     });
   } catch (error) {
     console.error("Error change user active status", error.message);
-    throw new Error("Failed to change user acttive status" + error.message);
+    throw new Error("Failed to change user active status" + error.message);
   }
 };
 

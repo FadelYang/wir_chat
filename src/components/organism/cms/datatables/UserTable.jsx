@@ -124,7 +124,7 @@ const UserTable = (props) => {
       accessorKey: "role",
     },
     {
-      header: "Is Acttive",
+      header: "Is Active",
       cell: ({ row }) => (
         <>
           {isLoading && selectedRow === row.original.id ? (

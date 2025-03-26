@@ -17,7 +17,6 @@ const UserTable = (props) => {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedRow, setSelectedRow] = useState("");
-  const [selectedRowRole, setSelectedRowRole] = useState("");
   const [isUpdateRoleModalOpen, setIsUpdateRoleModalOpen] = useState("");
   const [selectedUpdateRole, setSelectedUpdaterole] = useState("");
 
@@ -113,7 +112,18 @@ const UserTable = (props) => {
     setIsLoading(true);
     setSelectedRow(userId);
 
+    
     if (!isConfirm) {
+      console.log(selectedRole);
+      setIsLoading(false);
+      setSelectedRow("");
+      return;
+    }
+
+    if (userId === user.uid) {
+      alert(`You can't update your own role`);
+      setIsLoading(false);
+      setSelectedRow("");
       return;
     }
 
@@ -192,9 +202,9 @@ const UserTable = (props) => {
               <a
                 className="block w-full text-left data-[focus]:bg-blue-100 px-2 py-1 hover:cursor-pointer"
                 onClick={() => {
-                  setIsUpdateRoleModalOpen(true);
                   setSelectedRow(row.original.id);
-                  setSelectedRowRole(row.original.role);
+                  setSelectedUpdaterole(row.original.role);
+                  setIsUpdateRoleModalOpen(true);
                 }}
               >
                 Update Role
@@ -236,7 +246,10 @@ const UserTable = (props) => {
           <div className='w-72'>
             <div className="flex justify-between mb-5 font-bold text-md">
               <h1>Update User Role</h1>
-              <button onClick={() => setIsUpdateRoleModalOpen(false)}>
+              <button onClick={() => {
+                  setSelectedUpdaterole("");
+                  setIsUpdateRoleModalOpen(false);
+                }}>
                 <i className="fa-solid fa-xmark"></i>
               </button>
             </div>
@@ -255,7 +268,7 @@ const UserTable = (props) => {
                     className="block w-full px-4 py-2 pr-8 leading-tight text-gray-700 bg-white border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                     id="role"
                     name="role"
-                    value={selectedUpdateRole !== "" ? selectedUpdateRole : selectedRowRole}
+                    value={selectedUpdateRole}
                     onChange={(event) => setSelectedUpdaterole(event.target.value)}
                     defaultValue="superadmin"
                   >

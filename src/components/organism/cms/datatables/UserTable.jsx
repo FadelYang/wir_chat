@@ -127,10 +127,15 @@ const UserTable = (props) => {
       return;
     }
 
-    const updatedUser = await updateUserRole(userId, selectedRole);
-    setIsLoading(false);
-    setSelectedRow("");
-    setIsUpdateRoleModalOpen(false)
+    try {
+      const updatedUser = await updateUserRole(userId, selectedRole);
+      setIsLoading(false);
+      setSelectedRow("");
+      setIsUpdateRoleModalOpen(false)
+      alert("successully updated user role!");
+    } catch (error) {
+      alert("Failed to updated user role!" + error)
+    }
   };
 
   useEffect(() => {

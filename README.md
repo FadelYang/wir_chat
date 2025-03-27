@@ -8,6 +8,8 @@ A ChatGPT-like website that you can use to learn more about WIR Group. This repo
 ## Installation Step
 - clone or download this repository
 - run `npm install` to install all package needs
+- copy `.env.example` file and rename it to `.env`
+- fill each key in `.env` file with value in Handover Access Document (ask your PIC to access this document)
 - run `npm run dev` to run the app locally
 - all firebase service or function to communicate with firebase are store in `/src/firebase`
 
@@ -26,6 +28,14 @@ Before contribute to this project, you need to know about these tools:
 - this project follows **atomic design** guideline to structure the folder, especially the components folder. You can read about **atomic design** [here](https://medium.com/galaxy-ux-studio/principles-of-atomic-design-7b03a30c3cb6)
 - make sure you know how to manage state in React, some state manage with useContext API
 - datatable in this project are build with tanstack react-table
+
+## Commit Message
+please follow [this](https://www.conventionalcommits.org/en/v1.0.0/) conventional commit to create a commit message
+
+# Deployment
+- run `npm run build` to build this project
+- run `npm run preview` to preview the build result
+- if the result ok, you can copy and paste the file inside `/dist` to a virtual machine or anywhere you want to deploy
 
 # Versioning
 ## Version 1.0.0

@@ -7,7 +7,7 @@ A ChatGPT-like website that you can use to learn more about WIR Group. This repo
 - npm v9.8.1
 ## Installation Step
 - clone or download this repository
-- run `npm run install` to install all package needs
+- run `npm install` to install all package needs
 - run `npm run dev` to run the app locally
 - all firebase service or function to communicate with firebase are store in `/src/firebase`
 

@@ -12,13 +12,15 @@ export const CollectionProvider = ({ children }) => {
   };
 
   const removeCollection = (language, collectionName) => {
-    setCollections((prev) => [
-      ...prev.filter(
+    setCollections((prev) =>
+      prev.filter(
         (collection) =>
-          collection.collectionName !== collectionName &&
-          collection.databaseLocation !== language
-      ),
-    ]);
+          !(
+            collection.collectionName === collectionName &&
+            collection.databaseLocation === language
+          )
+      )
+    );
   };
 
   return (

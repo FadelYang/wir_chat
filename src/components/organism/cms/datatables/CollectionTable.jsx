@@ -47,7 +47,6 @@ const CollectionTable = () => {
   const existingLanguages = ["indonesia", "english", "china", "japan"];
 
   const getAllCollections = async () => {
-    console.log({ isDeleting });
     const allCollections = [];
 
     for (let language of existingLanguages) {

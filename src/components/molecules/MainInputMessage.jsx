@@ -16,7 +16,7 @@ const MainInputMessage = ({
   } = useContext(LanguageContext);
 
   return (
-    <div className={`sticky bottom-0 pt-3 pb-1 ${!conversations ? 'my-auto' : ''}`}>
+    <div className={`sticky bottom-0 pt-3 pb-8 bg-white ${!conversations ? 'my-auto' : ''}`}>
       <form className='flex justify-center gap-1 mx-1 sm:mx-10'>
         <Textarea
           className='w-full px-5 py-2 border border-black resize-none box box-orer xl:w-1/2 sm:w-2/3 rounded-xl h-11 max-h-36'

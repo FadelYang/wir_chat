@@ -4,14 +4,20 @@ import HomePage from "./components/pages/HomePage";
 import Dashboard from "./components/pages/cms/Dashboard";
 import LanguageMenu from "./components/pages/cms/LanguageMenu";
 import CollectionMenu from "./components/pages/cms/CollectionMenu";
-import DatabaseMenu from "./components/pages/cms/DatabaseMenu";
+import UserMenu from "./components/pages/cms/UserMenu";
+// import DatabaseMenu from "./components/pages/cms/DatabaseMenu";
 import Login from "./components/pages/Login";
-import { ProtectedRoute } from "./utils/ProtectedRoute";
-import { useContext } from 'react';
-import { AuthContext } from './context/AuthContext';
+import { LoginGuard } from "./utils/LoginGuard";
+import { AdminGuard } from "./utils/AdminGuard";
+import { useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
+import NotFound from "./components/pages/NotFound";
+import ForgotPassword from "./components/pages/ForgotPassword";
+import UserProfile from "./components/pages/cms/UserProfile";
+import { MeGuard } from "./utils/MeGuard";
 
 function App() {
-  const { user } =  useContext(AuthContext)
+  const { user } = useContext(AuthContext);
 
   if (user === undefined) {
     return null;
@@ -23,36 +29,54 @@ function App() {
       <Route
         path="/dashboard"
         element={
-          <ProtectedRoute>
+          <LoginGuard>
             <Dashboard />
-          </ProtectedRoute>
+          </LoginGuard>
         }
       />
       <Route path="/login" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route
         path="/dashboard/languages"
         element={
-          <ProtectedRoute>
+          <LoginGuard>
             <LanguageMenu />
-          </ProtectedRoute>
+          </LoginGuard>
         }
       />
       <Route
         path="/dashboard/collections"
         element={
-          <ProtectedRoute>
+          <LoginGuard>
             <CollectionMenu />
-          </ProtectedRoute>
+          </LoginGuard>
         }
       />
       <Route
-        path="/dashboard/databases"
+        path="/dashboard/users"
         element={
-          <ProtectedRoute>
-            <DatabaseMenu />
-          </ProtectedRoute>
+          <AdminGuard>
+            <UserMenu />
+          </AdminGuard>
         }
       />
+      <Route
+        path="/dashboard/users/:uid"
+        element={
+          <MeGuard>
+            <UserProfile />
+          </MeGuard>
+        }
+      />
+      {/* <Route
+        path="/dashboard/databases"
+        element={
+          <LoginGuard>
+            <DatabaseMenu />
+          </LoginGuard>
+        }
+      /> */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
